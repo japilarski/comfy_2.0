@@ -1,0 +1,17 @@
+{
+  "name": "@comfy/handlers",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@comfy/backend": "^1.0.0",
+    "@comfy/logger": "^1.0.0"
+  }
+}

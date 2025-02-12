@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: comfy-localdev-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: main
+    ports:
+      - '5432:5432' # Maps host port 3306 to container port 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+# node_app:
+#   image: express-dev-server
+#   build:
+#     dockerfile: express-dev-server.dockerfile
+#   volumes:
+#     - .:/usr/src/app
+#   ports:
+#     - '5001:5001'
+#   depends_on:
+#     - postgres  

@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "outDir": "dist",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
+    "strict": true,
+    "rootDir": "./",
+    "baseUrl": "./",
+    "paths": {
+      "@myorg/*": ["packages/*/src"]
+    }
+  },
+  "include": ["packages/*/src"],
+  "exclude": ["node_modules", "dist"]
+}
