@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start:db": " npx prisma migrate dev --name init",
-    "generate:types": "npx prisma generate",
-    "seed:db": "ts-node src/index.ts"
+    "db:seed": "ts-node src/index.ts",
+    "db:deploy": "npx prisma migrate deploy && npx prisma generate"
   },
   "keywords": [],
   "author": "",

@@ -1,7 +1,12 @@
-FROM node:18
+FROM node:lts-alpine3.17
 
 WORKDIR /usr/src/app
 
-EXPOSE 5001
+COPY package.json package-lock.json ./
 
-CMD [ "npx", "nodemon", "packages/express-dev-app/src/index.ts" ]
+RUN npm ci
+
+COPY . .
+
+CMD ["sh", "-c", "npm run db:deploy && npm run db:seed && npm run dev"]
+
