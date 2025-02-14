@@ -1,27 +1,63 @@
 services:
+  # postgres:
+  #   image: postgres:16
+  #   container_name: comfy-database
+  #   restart: always
+  #   environment:
+  #     POSTGRES_USER: root
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: main
+  #   ports:
+  #     - '5432:5432'
+  #   tmpfs:
+  #     - /var/lib/postgresql/data
+
+  # seeder:
+  #   image: seeder
+  #   build:
+  #     dockerfile: ./seeder.dockerfile
+  #   volumes:
+  #     - .:/usr/src/app
+  #   depends_on:
+  #     - postgres
+
+
   postgres:
     image: postgres:16
-    container_name: comfy-localdev-postgres
+    container_name: postgres_db
     restart: always
     environment:
-      POSTGRES_USER: root
+      POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: main
+      POSTGRES_DB: mydatabase
     ports:
-      - '5432:5432' # Maps host port 3306 to container port 5432
+      - '5432:5432'
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
+
+  seeder:
+    image: seeder
+    build: 
+      dockerfile: ./seeder.dockerfile
+    container_name: prisma_seeder
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgresql://user:password@postgres:5432/mydatabase
+    volumes:
+      - .:/app
+
+  node_app:
+    image: express-dev-server
+    build:
+      dockerfile: ./express-dev-server.dockerfile
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - '5001:5001'
+    depends_on:
+      seeder:
+        condition: service_completed_successfully
 
 volumes:
-  postgres_data:
-
-# node_app:
-#   image: express-dev-server
-#   build:
-#     dockerfile: express-dev-server.dockerfile
-#   volumes:
-#     - .:/usr/src/app
-#   ports:
-#     - '5001:5001'
-#   depends_on:
-#     - postgres  
+  pg_data:

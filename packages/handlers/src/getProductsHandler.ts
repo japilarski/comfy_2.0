@@ -8,13 +8,24 @@ export const handler = async (
 ): Promise<APIGatewayProxyResult> => {
   const container = new AppContainer();
   try {
+    logger.defaultMeta = {
+      requestId: event?.requestContext?.requestId ?? 'local',
+    };
+
     const controller: ProductsController = container.getProductsController();
-    return await controller.getProducts(event.pathParameters, event.queryStringParameters);
+
+    logger.verbose('Products Lambda invoked with event: ', event);
+    return await controller.getProducts(
+      event.pathParameters,
+      event.queryStringParameters
+    );
   } catch (error) {
-    logger.error('MY ERROR: ', error);
+    logger.error('Products Lambda failed with error: ', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: `MY ERROR: ${error}` }),
+      body: JSON.stringify({
+        error: `Products Lambda failed with error: ${error}`,
+      }),
     };
   } finally {
     container.tearDown();
