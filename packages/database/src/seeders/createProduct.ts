@@ -9,7 +9,7 @@ export const createProduct = async (prismaClient: PrismaClient) => {
       description: faker.commerce.productDescription(),
       featured: faker.datatype.boolean(),
       category: faker.commerce.department(),
-      imageUrl: faker.image.url(),
+      imageUrl: faker.image.avatarGitHub(),
       price: faker.number.int({ min: 10_000, max: 1_000_000 }),
       shipping: faker.datatype.boolean(),
       colors: [
