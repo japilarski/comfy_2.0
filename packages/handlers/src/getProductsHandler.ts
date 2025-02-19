@@ -15,7 +15,7 @@ export const handler = async (
     const controller: ProductsController = container.getProductsController();
 
     logger.verbose('Products Lambda invoked with event: ', event);
-    return await controller.getProducts(
+    return await controller.get(
       event.pathParameters,
       event.queryStringParameters
     );

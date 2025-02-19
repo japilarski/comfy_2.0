@@ -19,6 +19,8 @@ services:
       retries: 20
 
   express-dev-server:
+    volumes:
+      - .:/usr/src/app
     build:
       context: .
       dockerfile: express-dev-server.dockerfile
