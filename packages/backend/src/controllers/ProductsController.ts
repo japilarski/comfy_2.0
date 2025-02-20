@@ -53,9 +53,9 @@ export class ProductsController {
     }
 
     logger.info('Getting metadata');
-    const pagination = await this.productsService.getMetadata(params);
+    const meta = await this.productsService.getMetadata(params);
 
     logger.info('Returning products');
-    return new OkResource({ data: products, metadata: pagination }).toObject();
+    return new OkResource({ data: products, meta }).toObject();
   }
 }

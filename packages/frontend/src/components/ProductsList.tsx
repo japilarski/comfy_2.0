@@ -8,7 +8,6 @@ export const ProductsList = () => {
   return (
     <div className="mt-12 grid gap-y-8">
       {products.map((product) => {
-        const attributes = product.attributes;
         return (
           <Link
             key={product.id}
@@ -17,24 +16,20 @@ export const ProductsList = () => {
           >
             <figure className="px-1 pt-1">
               <img
-                src={attributes.image}
-                alt={attributes.title}
+                src={product.image}
+                alt={product.title}
                 className="rounded-xl h-32 w-32 sm:h-48 sm:w-48 object-cover group-hover:scale-105 duration-300"
               ></img>
             </figure>
             <div className="ml-0 sm:ml-16 flex-1">
-              <h3 className="capitalize font-medium text-lg text-primary">
-                {attributes.title}
-              </h3>
-              <h4 className="capitalize font-medium text-md">
-                {attributes.company}
-              </h4>
+              <h3 className="capitalize font-medium text-lg text-primary">{product.title}</h3>
+              <h4 className="capitalize font-medium text-md">{product.company}</h4>
               <p className="font-small ml-0 sm:ml-auto text-sm text-justify pr-4">
-                {attributes.description}
+                {product.description}
               </p>
             </div>
             <p className="font-medium ml-0 sm:ml-auto text-lg text-primary">
-              {formatPrice(attributes.price)}$
+              {formatPrice(product.price)}$
             </p>
           </Link>
         );

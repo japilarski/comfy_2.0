@@ -1,13 +1,22 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import express from 'express';
 import { GetProductsHandler } from '@comfy/handlers';
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Express + TypeScript Server');
+  res.send('Comfy 2.0 API');
 });
+
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type'],
+  })
+);
 
 app.get('/products/:productId?', async (req, res) => {
   const event = {

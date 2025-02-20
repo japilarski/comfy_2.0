@@ -21,7 +21,7 @@ export const Filters = () => {
       <FormSelect
         label="select category"
         name="category"
-        listToDisplay={metadata.categories}
+        listToDisplay={['all', ...metadata.categories]}
         size="select-sm"
         defaultValue={searchParams.category}
       ></FormSelect>
@@ -29,7 +29,7 @@ export const Filters = () => {
       <FormSelect
         label="select company"
         name="company"
-        listToDisplay={metadata.companies}
+        listToDisplay={['all', ...metadata.companies]}
         size="select-sm"
         defaultValue={searchParams.company}
       ></FormSelect>

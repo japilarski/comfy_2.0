@@ -16,16 +16,13 @@ const singleProductQuery = (id: number) => ({
 export const loader =
   (queryClient: QueryClient) =>
   async ({ params }: any): Promise<singleProductResponse> => {
-    const response = await queryClient.ensureQueryData(
-      singleProductQuery(params.id)
-    );
+    const response = await queryClient.ensureQueryData(singleProductQuery(params.id));
     return { product: response.data.data };
   };
 
 export const SingleProduct = () => {
   const { product } = useLoaderData() as singleProductResponse;
-  const productAttributes = product.attributes;
-  const [productColor, setProductColor] = useState(productAttributes.colors[0]);
+  const [productColor, setProductColor] = useState(product.colors[0]);
   const [amount, setAmount] = useState(1);
 
   const handleAmount = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -35,10 +32,10 @@ export const SingleProduct = () => {
   const cartProduct: cartItem = {
     cartId: product.id + productColor,
     productId: product.id,
-    image: productAttributes.image,
-    title: productAttributes.title,
-    price: productAttributes.price,
-    company: productAttributes.company,
+    image: product.image,
+    title: product.title,
+    price: product.price,
+    company: product.company,
     productColor,
     amount,
   };
@@ -67,27 +64,21 @@ export const SingleProduct = () => {
       <div className="mt-6 grid gap-y-8 lg:grid-cols-2 lg:gap-x-16">
         {/* IMAGE */}
         <img
-          src={productAttributes.image}
-          alt={productAttributes.title}
+          src={product.image}
+          alt={product.title}
           className="w-96 h-96 object-cover rounded-lg lg:w-full"
         ></img>
         {/* DESCRIPTION */}
         <div>
-          <h1 className="capitalize text-3xl font-bold">
-            {productAttributes.title}
-          </h1>
-          <h4 className="text-xl text-neutral-content font-bold mt-2">
-            {productAttributes.company}
-          </h4>
-          <p className="mt-3 text-xl">{formatPrice(productAttributes.price)}</p>
-          <p className="mt-6 leading-8">{productAttributes.description}</p>
+          <h1 className="capitalize text-3xl font-bold">{product.title}</h1>
+          <h4 className="text-xl text-neutral-content font-bold mt-2">{product.company}</h4>
+          <p className="mt-3 text-xl">{formatPrice(product.price)}</p>
+          <p className="mt-6 leading-8">{product.description}</p>
           {/* COLORS */}
           <div className="mt-6">
-            <h4 className="text-md font-medium tracking-wider capitalize">
-              colors
-            </h4>
+            <h4 className="text-md font-medium tracking-wider capitalize">colors</h4>
             <div className="mt-2 flex items-center">
-              {productAttributes.colors.map((color) => {
+              {product.colors.map((color) => {
                 return (
                   <button
                     key={color}
@@ -105,9 +96,7 @@ export const SingleProduct = () => {
           {/* AMOUNT */}
           <div className="form-control w-full max-w-xs">
             <label htmlFor="amount" className="">
-              <h4 className="text-md font-medium -tracking-wider capitalize">
-                amount
-              </h4>
+              <h4 className="text-md font-medium -tracking-wider capitalize">amount</h4>
             </label>
             <select
               id="amount"

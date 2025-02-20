@@ -1,7 +1,6 @@
 export type { product } from './loaders/products/product';
 export type { pagination } from './pagination';
 export type { productsLoaderData } from './loaders/products/productsLoaderData';
-export type { productAttributes } from './loaders/products/productAttributes';
 export type { productsMetadata } from './loaders/products/productsMetadata';
 export type { productsLoaderResponse } from './loaders/products/productsLoaderResponse';
 export type { singleProductResponse } from './loaders/products/singleProductResponse';

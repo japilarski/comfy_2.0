@@ -13,14 +13,14 @@ export type FormRangeProps = {
 
 // const getMaxPrice = (products: product[]): number => {
 //   return products.reduce((maxPrice, product) => {
-//     const price = parseFloat(product.attributes.price);
+//     const price = parseFloat(product.price);
 //     return price > maxPrice ? price : maxPrice;
 //   }, 0);
 // };
 
 export const FormRange = (props: FormRangeProps) => {
   // const { products } = useLoaderData() as productsLoaderResponse;
-  const maxPrice = 100_000;
+  const maxPrice = 100_000_000;
   const step = 100;
   const [selectedPrice, setSelectedPrice] = useState(
     props.defaultValue ? parseInt(props.defaultValue) : maxPrice
@@ -39,9 +39,7 @@ export const FormRange = (props: FormRangeProps) => {
         max={maxPrice}
         step={step}
         value={selectedPrice}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setSelectedPrice(parseInt(e.target.value))
-        }
+        onChange={(e: ChangeEvent<HTMLInputElement>) => setSelectedPrice(parseInt(e.target.value))}
         className={`range range-primary ${props.size}`}
       ></input>
       {/* 

@@ -17,7 +17,7 @@ export class ProductsService {
       where: {
         shipping: !params.shipping ? undefined : params.shipping === 'on',
         featured: !params.featured ? undefined : params.featured === 'true',
-        category: !params.category ? undefined : params.category,
+        category: !params.category || params.category === 'all' ? undefined : params.category,
         company: !params.company || params.company === 'all' ? undefined : params.company,
         name: !params.search
           ? undefined
@@ -41,7 +41,7 @@ export class ProductsService {
       where: {
         shipping: !params.shipping ? undefined : params.shipping === 'on',
         featured: !params.featured ? undefined : params.featured === 'true',
-        category: !params.category ? undefined : params.category,
+        category: !params.category || params.category === 'all' ? undefined : params.category,
         company: !params.company || params.company === 'all' ? undefined : params.company,
         name: !params.search
           ? undefined
@@ -57,11 +57,28 @@ export class ProductsService {
       },
     });
 
+    const categories = await this.prismaClient.product.findMany({
+      select: {
+        category: true,
+      },
+      distinct: ['category'],
+    });
+    const companies = await this.prismaClient.product.findMany({
+      select: {
+        company: true,
+      },
+      distinct: ['company'],
+    });
+
     return {
-      page: this.getPage(params.page),
-      pageSize: this.pageSize,
-      pageCount: Math.ceil(total / this.pageSize),
-      total,
+      pagination: {
+        page: this.getPage(params.page),
+        pageSize: this.pageSize,
+        pageCount: Math.ceil(total / this.pageSize),
+        total,
+      },
+      categories: categories.map((category) => category.category),
+      companies: companies.map((company) => company.company),
     };
   }
 
