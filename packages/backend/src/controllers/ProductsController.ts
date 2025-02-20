@@ -51,7 +51,11 @@ export class ProductsController {
       logger.error('Products not found');
       return new NotFoundResource().toObject();
     }
+
+    logger.info('Getting metadata');
+    const pagination = await this.productsService.getMetadata(params);
+
     logger.info('Returning products');
-    return new OkResource(products).toObject();
+    return new OkResource({ data: products, metadata: pagination }).toObject();
   }
 }
