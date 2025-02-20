@@ -17,12 +17,12 @@ export const ProductsGrid = () => {
             <figure className="px-4 pt-4">
               <img
                 src={product.image}
-                alt={product.title}
+                alt={product.name}
                 className="rounded-xl h-64 md:h-48 w-full object-cover"
               ></img>
             </figure>
             <div className="card-body items-center text-center">
-              <h2 className="card-title capitalize tracking-wide">{product.title}</h2>
+              <h2 className="card-title capitalize tracking-wide">{product.name}</h2>
               <span className="text-secondary">{formatPrice(product.price)}$</span>
             </div>
           </Link>

@@ -7,7 +7,7 @@ export const seedDatabase = async () => {
   const prismaClient = new PrismaClient();
 
   try {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 15; i++) {
       await createProduct(prismaClient);
     }
   } catch (error) {

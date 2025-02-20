@@ -21,7 +21,7 @@ model product {
   description String
   featured    Boolean
   category    String
-  imageUrl    String
+  image       String
   price       Int
   shipping    Boolean
   colors      String[]

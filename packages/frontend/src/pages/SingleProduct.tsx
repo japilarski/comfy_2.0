@@ -33,7 +33,7 @@ export const SingleProduct = () => {
     cartId: product.id + productColor,
     productId: product.id,
     image: product.image,
-    title: product.title,
+    title: product.name,
     price: product.price,
     company: product.company,
     productColor,
@@ -65,12 +65,12 @@ export const SingleProduct = () => {
         {/* IMAGE */}
         <img
           src={product.image}
-          alt={product.title}
+          alt={product.name}
           className="w-96 h-96 object-cover rounded-lg lg:w-full"
         ></img>
         {/* DESCRIPTION */}
         <div>
-          <h1 className="capitalize text-3xl font-bold">{product.title}</h1>
+          <h1 className="capitalize text-3xl font-bold">{product.name}</h1>
           <h4 className="text-xl text-neutral-content font-bold mt-2">{product.company}</h4>
           <p className="mt-3 text-xl">{formatPrice(product.price)}</p>
           <p className="mt-6 leading-8">{product.description}</p>

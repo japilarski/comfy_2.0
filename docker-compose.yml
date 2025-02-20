@@ -17,6 +17,8 @@ services:
       interval: 5s
       timeout: 2s
       retries: 20
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   express-dev-server:
     volumes:
@@ -27,7 +29,6 @@ services:
     ports:
       - '5001:5001'
     stdin_open: true
-    # tty: true
     depends_on:
       postgres_db:
         condition: service_healthy
@@ -36,23 +37,9 @@ services:
     networks:
       - prisma-network
 
-  # prisma-studio:
-  #   image: node:lts-alpine3.17
-  #   working_dir: /usr/src/app
-  #   volumes:
-  #     - .:/usr/src/app
-  #   command: npx prisma studio --port 5555 --browser none
-  #   ports:
-  #     - '5555:5555'
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - prisma-network
-  #   depends_on:
-  #     postgres_db:
-  #       condition: service_healthy
-  #     express-dev-server:
-  #       condition: service_started
+volumes:
+  postgres_data:
+    external: false
 
 networks:
   prisma-network:

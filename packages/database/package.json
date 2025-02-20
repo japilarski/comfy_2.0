@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "db:seed": "ts-node src/index.ts",
-    "db:deploy": "npx prisma migrate deploy && npx prisma generate"
+    "db:deploy": "npx prisma migrate deploy && npx prisma generate",
+    "db:migrate": "npx prisma migrate dev --name name"
   },
   "keywords": [],
   "author": "",
