@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 import hero1 from '../assets/hero1.webp';
 import hero2 from '../assets/hero3.webp';
 import hero3 from '../assets/hero2.webp';
@@ -15,22 +13,16 @@ export const Hero = () => {
           We are changing the way people shop
         </h1>
         <p className="mt-8 max-w-xl text-lg leading-8 text-justify">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis,
-          exercitationem nobis autem expedita obcaecati aspernatur est quo
-          labore ducimus perferendis explicabo fugit, provident odio hic
-          praesentium illum! Impedit vel laudantium pariatur minus hic? Modi
-          labore atque esse explicabo vel quia.
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis, exercitationem nobis autem expedita obcaecati
+          aspernatur est quo labore ducimus perferendis explicabo fugit, provident odio hic praesentium illum! Impedit
+          vel laudantium pariatur minus hic? Modi labore atque esse explicabo vel quia.
         </p>
       </div>
       <div className="hidden h-[28rem] lg:carousel carousel-center p-4 space-x-4 bg-neutral rounded-box">
         {carouselImages.map((image) => {
           return (
             <div key={image} className="carousel-item">
-              <img
-                src={image}
-                className="rounded-box h-full w-80 object-cover"
-                alt={image}
-              ></img>
+              <img src={image} className="rounded-box h-full w-80 object-cover" alt={image}></img>
             </div>
           );
         })}

@@ -22,12 +22,8 @@ const cartSlice = createSlice({
   reducers: {
     addItem: (state, action) => {
       const itemToAdd = action.payload.product as cartItem;
-      const item = state.cartItems.find(
-        (i: cartItem) => i.cartId === itemToAdd.cartId
-      );
-      item
-        ? (item.amount += itemToAdd.amount)
-        : state.cartItems.push(itemToAdd);
+      const item = state.cartItems.find((i: cartItem) => i.cartId === itemToAdd.cartId);
+      item ? (item.amount += itemToAdd.amount) : state.cartItems.push(itemToAdd);
       state.numItemsInCart += itemToAdd.amount;
       state.cartTotal += itemToAdd.amount * itemToAdd.price;
       cartSlice.caseReducers.calculateTotals(state);
@@ -39,15 +35,11 @@ const cartSlice = createSlice({
     },
     removeItem: (state, action) => {
       const { cartId } = action.payload;
-      const itemToRemove = state.cartItems.find(
-        (i: cartItem) => i.cartId === cartId
-      ) as cartItem;
+      const itemToRemove = state.cartItems.find((i: cartItem) => i.cartId === cartId) as cartItem;
       if (!itemToRemove) {
         throw new Error('wrong id!');
       }
-      state.cartItems = state.cartItems.filter(
-        (i: cartItem) => i.cartId !== cartId
-      );
+      state.cartItems = state.cartItems.filter((i: cartItem) => i.cartId !== cartId);
       state.numItemsInCart -= itemToRemove.amount;
       state.cartTotal -= itemToRemove.amount * itemToRemove.price;
       cartSlice.caseReducers.calculateTotals(state);
@@ -55,9 +47,7 @@ const cartSlice = createSlice({
     },
     editItem: (state, action) => {
       const { cartId, amount } = action.payload;
-      const itemToEdit = state.cartItems.find(
-        (i: cartItem) => i.cartId === cartId
-      ) as cartItem;
+      const itemToEdit = state.cartItems.find((i: cartItem) => i.cartId === cartId) as cartItem;
       if (!itemToEdit) {
         throw new Error('wrong id!');
       }

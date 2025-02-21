@@ -1,17 +1,10 @@
-import {
-  createLogger,
-  format,
-  Logform,
-  transports,
-  Logger,
-  debug,
-} from 'winston';
+import { createLogger, debug, format, Logform, Logger, transports } from 'winston';
 
 const { combine, json, colorize, prettyPrint } = format;
 
 const validLogLevels = ['error', 'warn', 'info', 'verbose', 'debug', 'silly'];
 
-const defaultLogLevel = 'info';
+const defaultLogLevel = 'debug';
 
 const prodLogFormat: Logform.Format = json();
 const devLogFormat: Logform.Format = combine(

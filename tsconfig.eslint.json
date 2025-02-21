@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "types": [
+      "@types/node",
+      "@types/jest"
+    ],
+    "noEmit": true,
+    "allowJs": true
+  },
+  "extends": "./tsconfig.json",
+  "include": [
+    ".eslintrc.js",
+    "packages/**/*",
+    "commitlint.config.js",
+    "documentation/maintainer-documentation/**/*.ts",
+    "documentation/maintainer-documentation/**/*.js"
+  ]
+}

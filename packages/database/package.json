@@ -6,7 +6,8 @@
     "build": "tsc",
     "db:seed": "ts-node src/index.ts",
     "db:deploy": "npx prisma migrate deploy && npx prisma generate",
-    "db:migrate": "npx prisma migrate dev --name name"
+    "db:migrate": "npx prisma migrate dev --name name",
+    "db:generate-types": "npx prisma generate"
   },
   "keywords": [],
   "author": "",

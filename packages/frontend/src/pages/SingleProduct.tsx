@@ -1,10 +1,9 @@
 import { customFetch, formatPrice } from '../utils';
 import { cartItem, singleProductResponse } from '../types';
 import { Link, useLoaderData } from 'react-router-dom';
-import { useState } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addItem } from '../features/cart/cartSlice';
+import { addItem } from '../features';
 import { generateAmountOptions } from '../utils/generateAmountOptions';
 import { QueryClient } from '@tanstack/react-query';
 
@@ -63,11 +62,7 @@ export const SingleProduct = () => {
       {/* PRODUCT */}
       <div className="mt-6 grid gap-y-8 lg:grid-cols-2 lg:gap-x-16">
         {/* IMAGE */}
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-96 h-96 object-cover rounded-lg lg:w-full"
-        ></img>
+        <img src={product.image} alt={product.name} className="w-96 h-96 object-cover rounded-lg lg:w-full"></img>
         {/* DESCRIPTION */}
         <div>
           <h1 className="capitalize text-3xl font-bold">{product.name}</h1>
@@ -83,9 +78,7 @@ export const SingleProduct = () => {
                   <button
                     key={color}
                     type="button"
-                    className={`badge w-8 h-8 mr-2 ${
-                      color == productColor && 'border-4 border-neutral'
-                    }`}
+                    className={`badge w-8 h-8 mr-2 ${color == productColor && 'border-4 border-neutral'}`}
                     style={{ backgroundColor: color }}
                     onClick={() => setProductColor(color)}
                   ></button>
@@ -98,11 +91,7 @@ export const SingleProduct = () => {
             <label htmlFor="amount" className="">
               <h4 className="text-md font-medium -tracking-wider capitalize">amount</h4>
             </label>
-            <select
-              id="amount"
-              className="select select-secondary select-bordered select-md"
-              onChange={handleAmount}
-            >
+            <select id="amount" className="select select-secondary select-bordered select-md" onChange={handleAmount}>
               {generateAmountOptions(amount + 5)}
             </select>
           </div>

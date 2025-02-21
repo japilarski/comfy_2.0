@@ -8,7 +8,8 @@
     "db:deploy": "npm run db:deploy -w=@comfy/database",
     "db:seed": "npm run db:seed -w=@comfy/database",
     "copy:env": "cp .env.example .env",
-    "db:migrate": "npm run db:migrate -w=@comfy/database"
+    "db:migrate": "npm run db:migrate -w=@comfy/database",
+    "db:generate-types": "npm run db:generate-types -w=@comfy/database"
   },
   "keywords": [],
   "author": "",
