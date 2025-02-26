@@ -1,7 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { toast } from 'react-toastify';
 
-export type themeType = 'light' | 'dark';
+export enum ThemeEnum {
+  LIGHT = 'light',
+  DARK = 'dark',
+}
 
 export type user = {
   username: string;
@@ -11,16 +14,11 @@ export type user = {
 
 export type userState = {
   user: user | null;
-  theme: themeType;
+  theme: ThemeEnum;
 };
 
-const themes = {
-  light: 'light' as themeType,
-  dark: 'dark' as themeType,
-};
-
-const getThemeFromLocalStorage = (): themeType => {
-  const theme = (localStorage.getItem('theme') as themeType) || themes.dark;
+const getThemeFromLocalStorage = (): ThemeEnum => {
+  const theme = (localStorage.getItem('theme') as ThemeEnum) || ThemeEnum.DARK;
   document.documentElement.setAttribute('data-theme', theme);
   return theme;
 };
@@ -51,7 +49,7 @@ const userSlice = createSlice({
       toast.success('Logged out!');
     },
     toggleTheme: (state) => {
-      state.theme = state.theme === themes.dark ? themes.light : themes.dark;
+      state.theme = state.theme == ThemeEnum.DARK ? ThemeEnum.LIGHT : ThemeEnum.DARK;
       document.documentElement.setAttribute('data-theme', state.theme);
       localStorage.setItem('theme', state.theme);
     },

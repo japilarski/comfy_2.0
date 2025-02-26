@@ -1,3 +1,4 @@
+import React from 'react';
 import { FeaturedProducts, Hero } from '../components';
 import { customFetch } from '../utils';
 import { landingLoaderResponse } from '../types';

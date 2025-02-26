@@ -40,6 +40,7 @@ export const SingleProduct = () => {
   };
 
   const addToCart = () => {
+    // TODO: popup with question if you want to go to cart or continue shopping
     dispatch(addItem({ product: cartProduct }));
   };
 

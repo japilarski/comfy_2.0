@@ -1,3 +1,4 @@
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { clearCart, logoutUser, userState } from '../features';
@@ -7,9 +8,7 @@ export const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
-  const user = useSelector(
-    (state: { userState: userState }) => state.userState.user
-  );
+  const user = useSelector((state: { userState: userState }) => state.userState.user);
 
   const handleLogout = () => {
     navigate('/');
@@ -24,10 +23,7 @@ export const Header = () => {
         {user ? (
           <div className="flex gap-x-2 sm:gap-x-8 items-center">
             <p className="text-xs sm:text-sm">Hello, {user.username}</p>
-            <button
-              className="btn btn-xs btn-outline btn-primary"
-              onClick={handleLogout}
-            >
+            <button className="btn btn-xs btn-outline btn-primary" onClick={handleLogout}>
               logout
             </button>
           </div>
@@ -36,10 +32,7 @@ export const Header = () => {
             <Link to="/login" className="link link-hover text-xs sm: text-sm">
               Sign in / Guest
             </Link>
-            <Link
-              to="/register"
-              className="link link-hover text-xs sm: text-sm"
-            >
+            <Link to="/register" className="link link-hover text-xs sm: text-sm">
               Create Account
             </Link>
           </div>
