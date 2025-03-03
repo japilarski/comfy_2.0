@@ -60,6 +60,4 @@ export class ProductsController {
     logger.info('Returning products');
     return new OkResource({ data: products, meta }).toObject();
   }
-
-  public async
 }
