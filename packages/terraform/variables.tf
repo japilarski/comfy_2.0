@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "us-east-1"  # Or use a variable
-}
-
 # Variables for the root module
 variable "environment" {
   description = "Deployment environment (e.g., dev, staging, prod)"

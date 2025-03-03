@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "build": "npm run build -w=@comfy/handlers",
     "dev": "npm run start:dev -w=@comfy/express-dev-app",
     "frontend:dev": "npm run dev -w=@comfy/frontend",
     "frontend:build": "npx vite build -w=@comfy/frontend",

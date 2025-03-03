@@ -8,7 +8,7 @@ const defaultLogLevel = 'debug';
 
 const prodLogFormat: Logform.Format = json();
 const devLogFormat: Logform.Format = combine(
-  format.prettyPrint(),
+  json(),
   colorize({
     all: true,
     colors: {

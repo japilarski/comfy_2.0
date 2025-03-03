@@ -16,7 +16,7 @@ resource "aws_db_instance" "postgres" {
   # Network & security
   db_subnet_group_name   = var.db_subnet_group_name
   vpc_security_group_ids = [var.db_security_group_id]
-  publicly_accessible    = false
+  publicly_accessible    = true
 
   # Backup and maintenance
   backup_retention_period = 0

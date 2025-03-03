@@ -56,7 +56,7 @@ export class ProductsService {
 
     return {
       pagination: {
-        page: this.getPage(params.page),
+        page: this.getPage(params?.page),
         pageSize: this.pageSize,
         pageCount: Math.ceil(total / this.pageSize),
         total,
@@ -68,17 +68,17 @@ export class ProductsService {
 
   private processQueryParams(params: ProductQueryParams) {
     return {
-      skip: (this.getPage(!params.page ? '1' : params.page) - 1) * this.pageSize,
+      skip: (this.getPage(params?.page) - 1) * this.pageSize,
       take: this.pageSize,
-      shipping: params.shipping ? params.shipping === 'on' : undefined,
-      featured: params.featured ? params.featured === 'true' : undefined,
-      category: params.category && params.category !== 'all' ? params.category : undefined,
-      company: params.company && params.company !== 'all' ? params.company : undefined,
-      search: params.search ? ({ mode: 'insensitive', contains: params.search } as any) : undefined,
-      price: params.price ? { lte: parseInt(params.price, 10) } : undefined,
+      shipping: params?.shipping ? params.shipping === 'on' : undefined,
+      featured: params?.featured ? params.featured === 'true' : undefined,
+      category: params?.category && params.category !== 'all' ? params.category : undefined,
+      company: params?.company && params.company !== 'all' ? params.company : undefined,
+      search: params?.search ? ({ mode: 'insensitive', contains: params.search } as any) : undefined,
+      price: params?.price ? { lte: parseInt(params.price, 10) } : undefined,
       orderBy: {
-        name: params.order === 'a-z' ? 'asc' : params.order === 'z-a' ? 'desc' : undefined,
-        price: params.order === 'low' ? 'asc' : params.order === 'high' ? 'desc' : undefined,
+        name: params?.order === 'a-z' ? 'asc' : params?.order === 'z-a' ? 'desc' : undefined,
+        price: params?.order === 'low' ? 'asc' : params?.order === 'high' ? 'desc' : undefined,
       } as any,
     };
   }

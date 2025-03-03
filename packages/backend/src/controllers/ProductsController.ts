@@ -20,7 +20,7 @@ export class ProductsController {
       return new BadRequestResource(errorMessages).toObject();
     }
 
-    if (!pathParamsParse.data.productId) {
+    if (!pathParamsParse?.data?.productId) {
       logger.info('Getting all products');
       return await this.getMany(queryParamsParse.data);
     }
@@ -60,4 +60,6 @@ export class ProductsController {
     logger.info('Returning products');
     return new OkResource({ data: products, meta }).toObject();
   }
+
+  public async
 }

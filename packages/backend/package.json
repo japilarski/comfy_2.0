@@ -12,6 +12,11 @@
   "description": "",
   "dependencies": {
     "@comfy/http-resources": "^1.0.0",
+    "@comfy/logger": "^1.0.0",
+    "pg": "^8.13.3",
     "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.11"
   }
 }

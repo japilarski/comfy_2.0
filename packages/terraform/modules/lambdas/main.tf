@@ -1,19 +1,19 @@
 # archive lambda
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_file = "${path.root}/../lambdas/greetings_lambda/index.mjs"
-  output_path = "lambda.zip"
+  source_file = "${path.root}/../handlers/dist/getProductsHandler.js"
+  output_path = "${path.root}/../handlers/dist/getProductsHandler.zip"
 }
 
 # Lambda function (minimal example)
 resource "aws_lambda_function" "products_lambda" {
   function_name = "${var.environment}-products_lambda"
   role          = aws_iam_role.lambda_exec_role.arn
-  handler       = "index.handler"
+  handler       = "getProductsHandler.handler"
   runtime       = "nodejs18.x"
 
   # Use inline code for example (use S3 for real code)
-  filename      = "${path.module}/lambda_function.zip"
+  filename      = "${path.root}/../handlers/dist/getProductsHandler.zip"
 
   # VPC configuration to access the private RDS instance
   vpc_config {
@@ -23,11 +23,7 @@ resource "aws_lambda_function" "products_lambda" {
 
   environment {
     variables = {
-      DB_HOST     = var.db_host
-      DB_PORT     = "5432"
-      DB_NAME     = var.db_name
-      DB_USERNAME = var.db_username
-      DB_PASSWORD = var.db_password
+      DATABASE_URL = "postgresql://${var.db_username}:${var.db_password}@${var.db_host}:5432/${var.db_name}?schema=public"
     }
   }
 
