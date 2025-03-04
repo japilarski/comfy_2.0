@@ -1,16 +1,11 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { logger } from '@comfy/logger';
-import { AppContainer } from '@comfy/backend';
-import { ProductsController } from '@comfy/backend';
+import { AppContainer, ProductsController } from '@comfy/backend';
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const container = new AppContainer();
   try {
-    logger.defaultMeta = {
-      requestId: event?.requestContext?.requestId ?? 'local',
-    };
-
-    const controller: ProductsController = container.getProductsController();
+    const controller: ProductsController = await container.getProductsController();
 
     logger.verbose('Products Lambda invoked with event: ', event);
     return await controller.get(event.pathParameters, event.queryStringParameters);
@@ -23,6 +18,6 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       }),
     };
   } finally {
-    container.tearDown();
+    await container.tearDown();
   }
 };

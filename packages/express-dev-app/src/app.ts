@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import express from 'express';
-import { GetProductsHandler } from '@comfy/handlers';
+import { handler } from '@comfy/handlers';
 import cors from 'cors';
 
 const app = express();
@@ -26,7 +26,7 @@ app.get('/products/:productId?', async (req, res) => {
     queryStringParameters: req.query,
   } as unknown as APIGatewayProxyEvent;
 
-  const response: APIGatewayProxyResult = await GetProductsHandler.handler(event);
+  const response: APIGatewayProxyResult = await handler(event);
 
   res.status(response.statusCode);
   res.send(response.body);

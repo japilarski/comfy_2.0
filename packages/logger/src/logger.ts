@@ -1,4 +1,5 @@
 import { createLogger, debug, format, Logform, Logger, transports } from 'winston';
+import * as process from 'node:process';
 
 const { combine, json, colorize, prettyPrint } = format;
 
@@ -8,7 +9,7 @@ const defaultLogLevel = 'debug';
 
 const prodLogFormat: Logform.Format = json();
 const devLogFormat: Logform.Format = combine(
-  json(),
+  process.env.LOCALDEV === 'true' ? prettyPrint() : json(),
   colorize({
     all: true,
     colors: {

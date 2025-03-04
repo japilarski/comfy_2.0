@@ -1,4 +1,5 @@
 import { logger } from '@comfy/logger';
+
 import app from './app';
 
 const port = 5001;

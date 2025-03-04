@@ -1,15 +1,15 @@
 import { ProductsController } from '../controllers';
-import { PrismaClient } from '@prisma/client';
 import { ProductsService } from '../services';
+import { EntityManagerProvider } from '../providers/entityManagerProvider';
 
 export class AppContainer {
-  private prismaClient = new PrismaClient();
+  private entityManagerProvider = new EntityManagerProvider();
 
-  public getProductsController() {
-    return new ProductsController(new ProductsService(this.prismaClient));
+  public async getProductsController() {
+    return new ProductsController(new ProductsService(await this.entityManagerProvider.createOrGetDatabaseClient()));
   }
 
   public async tearDown() {
-    await this.prismaClient.$disconnect();
+    await this.entityManagerProvider.tearDown();
   }
-};
+}

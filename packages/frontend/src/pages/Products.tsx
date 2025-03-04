@@ -1,9 +1,5 @@
-import { useEffect } from 'react';
-import {
-  Filters,
-  ComplexPaginationContainer,
-  ProductsContainer,
-} from '../components';
+import React, { useEffect } from 'react';
+import { ComplexPaginationContainer, Filters, ProductsContainer } from '../components';
 import { productsLoaderResponse, productsSearchParams } from '../types';
 import { customFetch } from '../utils';
 import { QueryClient } from '@tanstack/react-query';
@@ -11,8 +7,7 @@ import { QueryClient } from '@tanstack/react-query';
 const url = '/products';
 
 const allProductsQuery = (queryParams: any) => {
-  const { search, category, company, order, price, shipping, page } =
-    queryParams;
+  const { search, category, company, order, price, shipping, page } = queryParams;
 
   return {
     queryKey: [
@@ -35,9 +30,7 @@ export const loader =
     const searchParams = Object.fromEntries([
       ...new URL(props.request.url).searchParams.entries(),
     ]) as productsSearchParams;
-    const response = await queryClient.ensureQueryData(
-      allProductsQuery(searchParams)
-    );
+    const response = await queryClient.ensureQueryData(allProductsQuery(searchParams));
     return {
       products: response.data.data,
       metadata: response.data.meta,

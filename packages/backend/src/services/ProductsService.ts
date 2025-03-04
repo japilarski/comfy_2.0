@@ -1,68 +1,86 @@
-import { PrismaClient } from '@prisma/client';
 import { ProductQueryParams } from '../schemas';
-import { Product, ProductsMetadata } from '../types';
+import { Product, ProductsMetadata, SimplifiedProduct } from '../types';
+import { Client } from 'pg';
 
 export class ProductsService {
   private pageSize = 12;
 
-  constructor(private prismaClient: PrismaClient) {}
+  constructor(private client: Client) {}
 
   public async getProductById(productId: number): Promise<Product | null> {
-    return this.prismaClient.product.findUnique({
-      where: {
-        id: productId,
-      },
-    }) as any;
+    const queryResult = await this.client.query<Product>('SELECT * FROM product WHERE id = $1', [productId]);
+    return queryResult.rows[0] ? queryResult.rows[0] : null;
   }
 
-  public async getProducts(params: ProductQueryParams): Promise<Product[] | []> {
+  public async getProducts(params: ProductQueryParams): Promise<SimplifiedProduct[] | []> {
     const processedParams = this.processQueryParams(params);
-    return this.prismaClient.product.findMany({
-      skip: processedParams.skip,
-      take: processedParams.take,
-      orderBy: processedParams.orderBy,
-      where: {
-        shipping: processedParams.shipping,
-        featured: processedParams.featured,
-        category: processedParams.category,
-        company: processedParams.company,
-        name: processedParams.search,
-        price: processedParams.price,
-      },
-    }) as any;
+    const queryResult = await this.client.query<SimplifiedProduct>(
+      `
+          SELECT id, name, price, image FROM product
+          WHERE shipping = COALESCE($1, shipping)
+            AND featured = COALESCE($2, featured)
+            AND category = 'Walter, Watsica and Feil'
+            AND company = COALESCE($4, company)
+            AND name ~* COALESCE($5, name)
+            AND price <= COALESCE($6, price)
+            AND $3=$3
+          ORDER BY
+              CASE WHEN $7 = 'a-z' THEN name END,
+              CASE WHEN $7 = 'z-a' THEN name END DESC,
+              CASE WHEN $7 = 'low' THEN price END,
+              CASE WHEN $7 = 'high' THEN price END DESC
+          LIMIT $8 OFFSET $9;
+      `,
+      [
+        processedParams.shipping,
+        processedParams.featured,
+        processedParams.category,
+        processedParams.company,
+        processedParams.search,
+        processedParams.price,
+        processedParams.orderBy,
+        processedParams.take,
+        processedParams.skip,
+      ]
+    );
+
+    return queryResult.rows;
   }
 
   public async getMetadata(params: ProductQueryParams): Promise<ProductsMetadata> {
     const processedParams = this.processQueryParams(params);
-    const total: number = await this.prismaClient.product.count({
-      where: {
-        shipping: processedParams.shipping,
-        featured: processedParams.featured,
-        category: processedParams.category,
-        company: processedParams.company,
-        name: processedParams.search,
-        price: processedParams.price,
-      },
-    });
+    const total = await this.client.query(
+      `
+          SELECT COUNT(*) FROM product
+          WHERE shipping = COALESCE($1, shipping)
+            AND featured = COALESCE($2, featured)
+            AND category = COALESCE($3, category)
+            AND company = COALESCE($4, company)
+            AND name ~* COALESCE($5, name)
+            AND price <= COALESCE($6, price);
+      `,
+      [
+        processedParams.shipping,
+        processedParams.featured,
+        processedParams.category,
+        processedParams.company,
+        processedParams.search,
+        processedParams.price,
+      ]
+    );
 
-    const categories: Pick<Product, 'category'>[] = await this.prismaClient.product.findMany({
-      select: { category: true },
-      distinct: ['category'],
-    });
-    const companies: Pick<Product, 'company'>[] = await this.prismaClient.product.findMany({
-      select: { company: true },
-      distinct: ['company'],
-    });
+    const categories = await this.client.query('SELECT DISTINCT category FROM product'); //
+    const companies = await this.client.query('SELECT DISTINCT company FROM product'); //
 
     return {
       pagination: {
         page: this.getPage(params?.page),
         pageSize: this.pageSize,
-        pageCount: Math.ceil(total / this.pageSize),
-        total,
+        pageCount: Math.ceil(parseInt(total.rows[0].count, 10) / this.pageSize),
+        total: parseInt(total.rows[0].count, 10),
       },
-      categories: categories.map((category) => category.category),
-      companies: companies.map((company) => company.company) ?? [],
+      categories: categories.rows.map((category) => category.category),
+      companies: companies.rows.map((company) => company.company) ?? [],
     };
   }
 
@@ -70,16 +88,13 @@ export class ProductsService {
     return {
       skip: (this.getPage(params?.page) - 1) * this.pageSize,
       take: this.pageSize,
-      shipping: params?.shipping ? params.shipping === 'on' : undefined,
-      featured: params?.featured ? params.featured === 'true' : undefined,
-      category: params?.category && params.category !== 'all' ? params.category : undefined,
-      company: params?.company && params.company !== 'all' ? params.company : undefined,
-      search: params?.search ? ({ mode: 'insensitive', contains: params.search } as any) : undefined,
-      price: params?.price ? { lte: parseInt(params.price, 10) } : undefined,
-      orderBy: {
-        name: params?.order === 'a-z' ? 'asc' : params?.order === 'z-a' ? 'desc' : undefined,
-        price: params?.order === 'low' ? 'asc' : params?.order === 'high' ? 'desc' : undefined,
-      } as any,
+      shipping: params?.shipping ? params.shipping === 'on' : null,
+      featured: params?.featured ? params.featured === 'true' : null,
+      category: params?.category && params.category !== 'all' ? params.category : null,
+      company: params?.company && params.company !== 'all' ? params.company : null,
+      search: params?.search ? ({ mode: 'insensitive', contains: params.search } as any) : null,
+      price: params?.price ? { lte: parseInt(params.price, 10) } : null,
+      orderBy: params?.order,
     };
   }
 
