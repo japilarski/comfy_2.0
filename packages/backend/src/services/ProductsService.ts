@@ -19,11 +19,10 @@ export class ProductsService {
           SELECT id, name, price, image FROM product
           WHERE shipping = COALESCE($1, shipping)
             AND featured = COALESCE($2, featured)
-            AND category = 'Walter, Watsica and Feil'
+            AND category = COALESCE($3, category)
             AND company = COALESCE($4, company)
             AND name ~* COALESCE($5, name)
             AND price <= COALESCE($6, price)
-            AND $3=$3
           ORDER BY
               CASE WHEN $7 = 'a-z' THEN name END,
               CASE WHEN $7 = 'z-a' THEN name END DESC,
@@ -92,13 +91,13 @@ export class ProductsService {
       featured: params?.featured ? params.featured === 'true' : null,
       category: params?.category && params.category !== 'all' ? params.category : null,
       company: params?.company && params.company !== 'all' ? params.company : null,
-      search: params?.search ? ({ mode: 'insensitive', contains: params.search } as any) : null,
-      price: params?.price ? { lte: parseInt(params.price, 10) } : null,
-      orderBy: params?.order,
+      search: params?.search ?? null,
+      price: params?.price ?? null,
+      orderBy: params?.order ?? null,
     };
   }
 
   private getPage(page: string | undefined): number {
-    return parseInt(!page ? '1' : page, 10);
+    return parseInt(page ?? '1', 10);
   }
 }
