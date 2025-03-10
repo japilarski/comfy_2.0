@@ -11,6 +11,6 @@
       "@myorg/*": ["packages/*/src"]
     }
   },
-  "include": ["packages/*/src"],
+  "include": ["packages/*/src", "packages/database/src/providers/databaseProvider.ts"],
   "exclude": ["node_modules", "dist"]
 }

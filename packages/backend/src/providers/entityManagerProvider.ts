@@ -1,5 +1,5 @@
 import { Client } from 'pg';
-import { createDatabaseClient, destroyDatabaseClient } from './databaseProvider';
+import { createDatabaseClient, destroyDatabaseClient } from '../../../database/src/providers/databaseProvider';
 
 export class EntityManagerProvider {
   private databaseClient: Client | null = null;

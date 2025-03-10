@@ -3,8 +3,8 @@ import * as process from 'node:process';
 import { logger } from '@comfy/logger';
 
 export const createDatabaseClient = async (): Promise<Client> => {
+  logger.verbose('Creating database client...');
   try {
-    logger.verbose('Creating database client');
     const client = new Client({
       user: process.env.DB_USER,
       host: process.env.DB_HOST,
@@ -13,24 +13,24 @@ export const createDatabaseClient = async (): Promise<Client> => {
       port: Number(process.env.DB_PORT),
     });
 
-    logger.verbose('Client created');
+    logger.verbose('Client created!');
     await client.connect();
 
-    logger.verbose('Connection established');
+    logger.verbose('Connection established!');
     return client;
   } catch (error) {
-    logger.error('Database connection failed', { error });
+    logger.error('Database connection failed with errors: ', { error });
     throw error;
   }
 };
 
 export const destroyDatabaseClient = async (client: Client) => {
   try {
-    logger.verbose('Destroying database client');
+    logger.verbose('Destroying database client...');
     await client.end();
-    logger.verbose('Client destroyed');
+    logger.verbose('Client destroyed!');
   } catch (error) {
-    logger.error('Client destruction failed with errors', { error });
+    logger.error('Client destruction failed with errors:', { error });
     throw error;
   }
 };

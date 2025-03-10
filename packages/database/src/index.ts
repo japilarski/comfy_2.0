@@ -1,26 +1,34 @@
-import { PrismaClient } from '@prisma/client';
+import { createTable } from './migration/createTable';
 import { createProduct } from './seeders/createProduct';
 import { logger } from '@comfy/logger';
+import { createDatabaseClient } from './providers/databaseProvider';
 
-export const seedDatabase = async () => {
-  logger.info('Seeding database...');
-  const prismaClient = new PrismaClient();
+const schemas = ['products'];
 
+export const initializeDatabase = async () => {
+  const client = await createDatabaseClient();
+
+  logger.verbose('Initializing database...');
   try {
-    for (let i = 0; i < 15; i++) {
-      await createProduct(prismaClient);
+    for (const schema of schemas) {
+      await createTable(client, schema);
     }
+    logger.verbose('Database initialized successfully!');
   } catch (error) {
-    prismaClient.$disconnect();
-
-    logger.error('Error seeding database: ', error);
-    process.exit(1);
+    logger.error('Error initializing database:', { error });
+    throw error;
   }
 
-  prismaClient.$disconnect();
-
-  logger.info('Database seeded successfully!');
-  process.exit(0);
+  logger.verbose('Seeding database...');
+  try {
+    for (let i = 0; i < 12; i++) {
+      await createProduct(client);
+    }
+    logger.verbose('Database seeded successfully!');
+  } catch (error) {
+    logger.error('Error seeding database: ', { error });
+    throw error;
+  }
 };
 
-seedDatabase();
+initializeDatabase();

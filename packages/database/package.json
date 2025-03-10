@@ -4,10 +4,7 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
-    "db:seed": "ts-node src/index.ts",
-    "db:deploy": "npx prisma migrate deploy && npx prisma generate",
-    "db:migrate": "npx prisma migrate dev --name name",
-    "db:generate-types": "npx prisma generate"
+    "db:seed": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -15,12 +12,10 @@
   "description": "",
   "dependencies": {
     "@comfy/logger": "^1.0.0",
-    "@faker-js/faker": "^9.5.0",
-    "@prisma/client": "^6.3.1"
+    "@faker-js/faker": "^9.5.0"
   },
   "devDependencies": {
     "@types/node": "^22.13.1",
-    "prisma": "^6.3.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   }
