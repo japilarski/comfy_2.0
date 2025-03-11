@@ -1,46 +1,49 @@
 services:
-  postgres_db:
+  postgres:
     image: postgres:15
-    hostname: postgres_host
-    container_name: postgres_db
+    container_name: local_postgres
     restart: always
     environment:
-      POSTGRES_DB: postgres_database
-      POSTGRES_USER: postgres_user
       POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres_user
+      POSTGRES_DB: postgres_database
     ports:
       - '5432:5432'
-    networks:
-      - prisma-network
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres -d postgres']
-      interval: 5s
-      timeout: 2s
-      retries: 20
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres_user -d postgres_database']
+      interval: 5s
+      retries: 5
+      timeout: 3s
 
-  express-dev-server:
+  express-dev-app:
     volumes:
       - .:/usr/src/app
     build:
-      context: .
-      dockerfile: express-dev-server.dockerfile
+      # context: .
+      dockerfile: ./express-dev-app.dockerfile
     ports:
       - '5001:5001'
-    stdin_open: true
     depends_on:
-      postgres_db:
+      postgres:
         condition: service_healthy
     env_file:
       - .env
-    networks:
-      - prisma-network
+
+  db-seed:
+    image: node:20
+    container_name: db_seeder
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    command: ["npm", "run", "db:init"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
 
 volumes:
   postgres_data:
     external: false
-
-networks:
-  prisma-network:
-    name: prisma-network

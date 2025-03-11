@@ -1,8 +1,0 @@
-{
-  "watch": ["./packages/backend"],
-  "ext": "ts,json",
-  "ignore": ["node_modules", "dist"],
-  "execMap": {
-    "ts": "ts-node"
-  }
-}

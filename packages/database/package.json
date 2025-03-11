@@ -4,7 +4,7 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "tsc",
-    "db:seed": "ts-node src/index.ts"
+    "db:init": "ts-node src/runner.ts"
   },
   "keywords": [],
   "author": "",
@@ -12,7 +12,8 @@
   "description": "",
   "dependencies": {
     "@comfy/logger": "^1.0.0",
-    "@faker-js/faker": "^9.5.0"
+    "@faker-js/faker": "^9.5.0",
+    "dotenv": "^16.4.7"
   },
   "devDependencies": {
     "@types/node": "^22.13.1",

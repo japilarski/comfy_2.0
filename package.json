@@ -2,16 +2,14 @@
   "name": "comfy-2",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "npm run build -w=@comfy/handlers",
     "dev": "npm run start:dev -w=@comfy/express-dev-app",
     "frontend:dev": "npm run dev -w=@comfy/frontend",
     "frontend:build": "npx vite build -w=@comfy/frontend",
-    "db:deploy": "npm run db:deploy -w=@comfy/database",
-    "db:seed": "npm run db:seed -w=@comfy/database",
-    "copy:env": "cp .env.example .env",
-    "db:migrate": "npm run db:migrate -w=@comfy/database",
-    "db:generate-types": "npm run db:generate-types -w=@comfy/database"
+    "db:init": "npm run db:init -w=@comfy/database",
+    "recreate:dev": "docker-compose down -v && docker-compose up"
   },
   "keywords": [],
   "author": "",
@@ -21,11 +19,13 @@
     "packages/*"
   ],
   "devDependencies": {
+    "@types/node": "^22.13.10",
+    "nodemon": "^3.1.9",
+    "tsx": "^4.19.3",
     "typescript": "^5.7.3"
   },
   "dependencies": {
     "@types/aws-lambda": "^8.10.147",
-    "aws-lambda": "^1.0.7",
-    "ts-node": "^10.9.2"
+    "aws-lambda": "^1.0.7"
   }
 }

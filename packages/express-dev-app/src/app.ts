@@ -18,7 +18,7 @@ app.use(
   })
 );
 
-app.get('/products/:productId?', async (req, res) => {
+app.get('/products/:productId?', async (req: any, res: any) => {
   const event = {
     pathParameters: {
       productId: req.params.productId,

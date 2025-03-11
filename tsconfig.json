@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "CommonJS",
     "target": "ESNext",
     "strict": true,
     "rootDir": "./",
     "baseUrl": "./",
     "paths": {
-      "@myorg/*": ["packages/*/src"]
-    }
+      "@comfy/*": ["packages/*/src"]
+    },
+    "esModuleInterop": true
   },
-  "include": ["packages/*/src", "packages/database/src/providers/databaseProvider.ts"],
+  "include": ["packages/*/src"],
   "exclude": ["node_modules", "dist"]
 }
