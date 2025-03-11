@@ -31,3 +31,6 @@ variable "db_password" {
   description = "Database password"
 }
 
+variable "db_port" {
+  description = "Database port"
+}

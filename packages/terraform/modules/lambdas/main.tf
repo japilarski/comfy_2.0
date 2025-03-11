@@ -23,7 +23,11 @@ resource "aws_lambda_function" "products_lambda" {
 
   environment {
     variables = {
-      DATABASE_URL = "postgresql://${var.db_username}:${var.db_password}@${var.db_host}:5432/${var.db_name}?schema=public"
+      DB_USER=var.db_username
+      DB_HOST=var.db_host
+      DB_NAME=var.db_name
+      DB_PASSWORD=var.db_password
+      DB_PORT=var.db_port
     }
   }
 
