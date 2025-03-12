@@ -21,7 +21,6 @@ services:
     volumes:
       - .:/usr/src/app
     build:
-      # context: .
       dockerfile: ./express-dev-app.dockerfile
     ports:
       - '5001:5001'
@@ -31,7 +30,7 @@ services:
     env_file:
       - .env
 
-  db-seed:
+  db-seeder:
     image: node:20
     container_name: db_seeder
     working_dir: /usr/src/app
@@ -43,6 +42,20 @@ services:
         condition: service_healthy
     env_file:
       - .env
+
+  dev-frontend:
+    volumes:
+      - .:/usr/src/app
+    build:
+      dockerfile: ./vite-dev-frontend.dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+
 
 volumes:
   postgres_data:

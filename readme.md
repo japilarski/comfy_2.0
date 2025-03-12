@@ -4,9 +4,8 @@ This is monorepo with Comfy application.
 
 ## Local development
 
-### Backend 
-
-Local development backend is build based on docker compose - tool for defining and running multi-container applications. It consists of two containers - PostgreSQL database and express server. Before express server is run, database is seeded. 
+Local development is based on docker compose - tool for defining and running multi-container applications. 
+It consists of four containers - PostgreSQL database, dev express server and database seeder frontend.  
 
 ```bash
 npm run copy:env
@@ -14,22 +13,14 @@ npm run copy:env
 
 You might need to adjust `.env` file to your needs.
 
-Next step it to generate prisma dev migrations. Those are required for database creation and can be run inside docker container.
-
-```bash
-npm run db:migrate
-```
-
 Then run:
 
 ```bash
 docker compose up
 ```
 
-### Frontend
-
-Fronted uses React and Vite. To start development server run:
+To rebuild the containers (e.g. to make changes in infrastructure) run:
 
 ```bash
- npm run frontend:dev
+npm run recreate:dev
 ```
