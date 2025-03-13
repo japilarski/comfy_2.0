@@ -1,8 +1,4 @@
 {
-  "extends": "../../tsconfig.json",
-  "include": [
-    "src/**/*",
-    "docusaurus.config.ts",
-    "sidebars.ts"
-  ]
+  "extends": "../tsconfig.json",
+  "include": ["src/**/*", "docusaurus.config.ts", "sidebars.ts"]
 }

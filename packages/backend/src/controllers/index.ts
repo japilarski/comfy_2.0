@@ -1,1 +1,1 @@
-export * from './ProductsController'
+export * from './productsController'
