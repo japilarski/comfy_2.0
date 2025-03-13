@@ -1,0 +1,5 @@
+{
+  "*": ["git secrets --register-aws", "git secrets --pre_commit_hook --"],
+  "**/*.{ts,tsx,js,jsx}": "exlint --max-warnings=0 --fix",
+  "**/**/!package-lock.json": "git secrets --pre_commit_hook"
+}
