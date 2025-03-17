@@ -18,6 +18,6 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
       }),
     };
   } finally {
-    await container.tearDown();
+    // await container.tearDown();
   }
 };

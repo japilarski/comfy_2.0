@@ -26,15 +26,10 @@ export class ProductsController {
     }
 
     logger.info(`Getting product with productId: ${pathParamsParse.data.productId}`);
-    return this.getOne(parseInt(pathParamsParse.data.productId, 10));
+    return this.getOne(pathParamsParse.data.productId);
   }
 
-  public async getOne(productId: number): Promise<APIGatewayProxyResult> {
-    if (Number.isNaN(productId)) {
-      logger.error('ProductId must be a number');
-      return new BadRequestResource('ProductId must be a number!').toObject();
-    }
-
+  public async getOne(productId: string): Promise<APIGatewayProxyResult> {
     const product = await this.productsService.getProductById(productId);
     logger.debug('Product:', { product });
     if (!product) {
@@ -55,9 +50,9 @@ export class ProductsController {
     logger.debug('Products:', { products });
 
     logger.info('Getting metadata');
-    const meta = await this.productsService.getMetadata(params);
+    // const meta = await this.productsService.getMetadata(params);
 
     logger.info('Returning products');
-    return new OkResource({ data: products, meta }).toObject();
+    return new OkResource({ data: products, meta: {} }).toObject();
   }
 }
