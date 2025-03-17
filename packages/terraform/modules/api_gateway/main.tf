@@ -1,91 +1,75 @@
 # API Gateway REST API
-resource "aws_api_gateway_rest_api" "api" {
-  name        = "${var.environment}-products-api"
-  description = "API for products service"
-
-  endpoint_configuration {
-    types = ["REGIONAL"]
-  }
-
-  tags = {
-    Environment = var.environment
-  }
+resource "aws_api_gateway_rest_api" "products_api" {
+  name        = "products-api"
+  description = "API for products"
 }
 
-# /products resource
+# API Gateway resource for /products
 resource "aws_api_gateway_resource" "products" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_rest_api.api.root_resource_id
+  rest_api_id = aws_api_gateway_rest_api.products_api.id
+  parent_id   = aws_api_gateway_rest_api.products_api.root_resource_id
   path_part   = "products"
 }
 
-# GET method for /products
+# API Gateway resource for /products/{productId}
+resource "aws_api_gateway_resource" "product" {
+  rest_api_id = aws_api_gateway_rest_api.products_api.id
+  parent_id   = aws_api_gateway_resource.products.id
+  path_part   = "{productId}"
+}
+
+# API Gateway method for GET /products
 resource "aws_api_gateway_method" "get_products" {
-  rest_api_id   = aws_api_gateway_rest_api.api.id
+  rest_api_id   = aws_api_gateway_rest_api.products_api.id
   resource_id   = aws_api_gateway_resource.products.id
   http_method   = "GET"
   authorization = "NONE"
 }
 
-# Integration with Lambda for /products
-resource "aws_api_gateway_integration" "lambda_products" {
-  rest_api_id             = aws_api_gateway_rest_api.api.id
+# API Gateway method for GET /products/{productId}
+resource "aws_api_gateway_method" "get_product" {
+  rest_api_id   = aws_api_gateway_rest_api.products_api.id
+  resource_id   = aws_api_gateway_resource.product.id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+# API Gateway integration for GET /products
+resource "aws_api_gateway_integration" "get_products_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.products_api.id
   resource_id             = aws_api_gateway_resource.products.id
   http_method             = aws_api_gateway_method.get_products.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = var.lambda_invoke_arn
+  uri                     = var.get_products_lambda_invoke_arn
 }
 
-# /products/{id} resource
-resource "aws_api_gateway_resource" "product" {
-  rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_resource.products.id
-  path_part   = "{id}"
-}
-
-# GET method for /products/{id}
-resource "aws_api_gateway_method" "get_product" {
-  rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.product.id
-  http_method   = "GET"
-  authorization = "NONE"
-  request_parameters = {
-    "method.request.path.id" = true
-  }
-}
-
-# Integration with Lambda for /products/{id}
-resource "aws_api_gateway_integration" "lambda_product" {
-  rest_api_id             = aws_api_gateway_rest_api.api.id
+# API Gateway integration for GET /products/{productId}
+resource "aws_api_gateway_integration" "get_product_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.products_api.id
   resource_id             = aws_api_gateway_resource.product.id
   http_method             = aws_api_gateway_method.get_product.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = var.lambda_invoke_arn
+  uri                     = var.get_products_lambda_invoke_arn
 }
 
 # Lambda permission for API Gateway
 resource "aws_lambda_permission" "api_gateway" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+  statement_id  = "AllowAPIGatewayInvoke"
   action        = "lambda:InvokeFunction"
-  function_name = var.lambda_function_name
+  function_name = var.get_products_lambda_name
   principal     = "apigateway.amazonaws.com"
-
-  # Allow invocation from any method/resource/stage
-  source_arn = "${aws_api_gateway_rest_api.api.execution_arn}/*/*/*"
+  source_arn    = "${aws_api_gateway_rest_api.products_api.execution_arn}/*/*"
 }
 
 # API Gateway deployment
-resource "aws_api_gateway_deployment" "api" {
+resource "aws_api_gateway_deployment" "products_deployment" {
   depends_on = [
-    aws_api_gateway_integration.lambda_products,
-    aws_api_gateway_integration.lambda_product
+    aws_api_gateway_integration.get_products_integration,
+    aws_api_gateway_integration.get_product_integration
   ]
 
-  rest_api_id = aws_api_gateway_rest_api.api.id
-
-  lifecycle {
-    create_before_destroy = true
-  }
+  rest_api_id = aws_api_gateway_rest_api.products_api.id
+  stage_name = var.environment
 }

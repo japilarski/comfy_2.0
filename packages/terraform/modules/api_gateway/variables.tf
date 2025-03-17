@@ -2,14 +2,14 @@ variable "environment" {
   description = "Deployment environment"
 }
 
-variable "lambda_function_name" {
-  description = "Name of the Lambda function to invoke"
+variable "get_products_lambda_invoke_arn" {
+  description = "GetProducts lambda invoke ARN"
 }
 
-variable "lambda_function_arn" {
-  description = "ARN of the Lambda function to invoke"
+variable "get_products_lambda_arn" {
+  description = "GetProducts lambda ARN"
 }
 
-variable "lambda_invoke_arn" {
-  description = "Invoke ARN of the Lambda function"
+variable "get_products_lambda_name" {
+  description = "GetProducts lambda name"
 }
