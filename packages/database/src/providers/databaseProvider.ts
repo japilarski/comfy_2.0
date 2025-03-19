@@ -11,6 +11,9 @@ export const createDatabaseClient = async (): Promise<Client> => {
       database: process.env.DB_NAME,
       password: process.env.DB_PASSWORD,
       port: Number(process.env.DB_PORT),
+      ssl: {
+        rejectUnauthorized: false, // Use proper SSL configuration in production
+      },
     });
 
     logger.verbose('Client created!');

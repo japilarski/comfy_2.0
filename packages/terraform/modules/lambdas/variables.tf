@@ -6,12 +6,16 @@ variable "vpc_id" {
   description = "ID of the VPC"
 }
 
-variable "subnet_id" {
-  description = "ID of the subnet for Lambda"
+variable "private_subnet_av_zone_a_id" {
+  description = "ID of the availability zone A private subnet"
 }
 
-variable "security_group_id" {
-  description = "ID of the security group for Lambda"
+# variable "private_subnet_av_zone_b_id" {
+#   description = "ID of the availability zone B private subnet"
+# }
+
+variable "main_sg_id" {
+  description = "ID of the main security group"
 }
 
 

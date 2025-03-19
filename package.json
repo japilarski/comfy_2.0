@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "backend:build": "npm run build -w=@comfy/handlers",
+    "build:handlers": "npm run build -w=@comfy/handlers",
     "dev": "npm run start:dev -w=@comfy/express-dev-app",
     "frontend:dev": "npm run dev -w=@comfy/frontend",
     "frontend:build": "npx vite build -w=@comfy/frontend",

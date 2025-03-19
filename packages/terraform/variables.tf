@@ -1,4 +1,7 @@
-# Variables for the root module
+variable "region" {
+  description = "AWS region"
+}
+
 variable "environment" {
   description = "Deployment environment"
 }

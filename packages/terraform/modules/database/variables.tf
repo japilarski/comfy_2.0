@@ -25,7 +25,7 @@ variable "db_password" {
 
 variable "db_instance_class" {
   description = "RDS instance class"
-  default     = "db.t4g.micro"
+  default     = "db.t3.micro"
 }
 
 variable "db_allocated_storage" {
@@ -33,7 +33,17 @@ variable "db_allocated_storage" {
   default     = 20
 }
 
+variable "db_engine" {
+  description = "PostgreSQL engine version"
+  default     = "postgres"
+}
+
 variable "db_engine_version" {
   description = "PostgreSQL engine version"
   default     = "17.4"
+}
+
+variable "storage_type" {
+  description = "PostgreSQL engine version"
+  default     = "gp2"
 }

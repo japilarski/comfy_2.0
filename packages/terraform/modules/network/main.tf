@@ -1,6 +1,6 @@
 # Create a VPC
-resource "aws_vpc" "vpc" {
-  cidr_block           = var.vpc_cidr
+resource "aws_vpc" "main_vpc" {
+  cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
   enable_dns_support   = true
 
@@ -11,10 +11,10 @@ resource "aws_vpc" "vpc" {
 }
 
 # Create private subnets for the database
-resource "aws_subnet" "private_subnet_a" {
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, 1)
-  availability_zone = "${data.aws_region.current.name}a"
+resource "aws_subnet" "private_subnet_av_zone_a" {
+  vpc_id            = aws_vpc.main_vpc.id
+  cidr_block        = "10.0.1.0/24"
+  availability_zone = "${var.region}a"
 
   tags = {
     Name        = "${var.environment}-private-subnet-a"
@@ -22,134 +22,29 @@ resource "aws_subnet" "private_subnet_a" {
   }
 }
 
-resource "aws_subnet" "private_subnet_b" {
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, 2)
-  availability_zone = "${data.aws_region.current.name}b"
+# resource "aws_subnet" "private_subnet_av_zone_b" {
+#   vpc_id            = aws_vpc.main_vpc.id
+#   cidr_block        = "10.0.2.0/24"
+#   availability_zone = "${var.region}b"
+#
+#   tags = {
+#     Name        = "${var.environment}-private-subnet-b"
+#     Environment = var.environment
+#   }
+# }
 
-  tags = {
-    Name        = "${var.environment}-private-subnet-b"
-    Environment = var.environment
-  }
-}
-
-# Create a subnet for Lambda functions
-resource "aws_subnet" "lambda_subnet" {
-  vpc_id            = aws_vpc.vpc.id
-  cidr_block        = cidrsubnet(var.vpc_cidr, 8, 3)
-  availability_zone = "${data.aws_region.current.name}a"
-
-  tags = {
-    Name        = "${var.environment}-lambda-subnet"
-    Environment = var.environment
-  }
-}
-
-# Create a public subnet for the NAT Gateway
-resource "aws_subnet" "public_subnet" {
-  vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = cidrsubnet(var.vpc_cidr, 8, 4)
-  availability_zone       = "${data.aws_region.current.name}a"
-  map_public_ip_on_launch = true
-
-  tags = {
-    Name        = "${var.environment}-public-subnet"
-    Environment = var.environment
-  }
-}
-
-# Create DB subnet group
-resource "aws_db_subnet_group" "db_subnet_group" {
-  name       = "${var.environment}-db-subnet-group"
-  subnet_ids = [aws_subnet.private_subnet_a.id, aws_subnet.private_subnet_b.id]
-
-  tags = {
-    Name        = "${var.environment}-db-subnet-group"
-    Environment = var.environment
-  }
-}
-
-# Create security group for the database
-resource "aws_security_group" "db_sg" {
-  name        = "${var.environment}-db-security-group"
-  description = "Allow PostgreSQL traffic from Lambda only"
-  vpc_id      = aws_vpc.vpc.id
-
-  ingress {
-    from_port       = 5432
-    to_port         = 5432
-    protocol        = "tcp"
-    security_groups = [aws_security_group.lambda_sg.id]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name        = "${var.environment}-db-security-group"
-    Environment = var.environment
-  }
-}
-
-# Create security group for Lambda functions
-resource "aws_security_group" "lambda_sg" {
-  name        = "${var.environment}-lambda-security-group"
-  description = "Security group for Lambda functions"
-  vpc_id      = aws_vpc.vpc.id
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name        = "${var.environment}-lambda-security-group"
-    Environment = var.environment
-  }
-}
-
-# Create NAT Gateway for Lambda to access internet
-resource "aws_eip" "nat_eip" {
-  domain = "vpc"
-
-  tags = {
-    Name        = "${var.environment}-nat-eip"
-    Environment = var.environment
-  }
-}
-
-# Create internet gateway
+# Internet Gateway for the VPC
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = aws_vpc.main_vpc.id
 
   tags = {
-    Name        = "${var.environment}-internet-gateway"
-    Environment = var.environment
+    Name = "main-igw"
   }
 }
 
-# Create NAT Gateway
-resource "aws_nat_gateway" "nat_gateway" {
-  allocation_id = aws_eip.nat_eip.id
-  subnet_id     = aws_subnet.public_subnet.id
-
-  tags = {
-    Name        = "${var.environment}-nat-gateway"
-    Environment = var.environment
-  }
-
-  depends_on = [aws_internet_gateway.igw]
-}
-
-# Create public route table
-resource "aws_route_table" "public_route_table" {
-  vpc_id = aws_vpc.vpc.id
+# Route Table for the VPC
+resource "aws_route_table" "main" {
+  vpc_id = aws_vpc.main_vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -157,37 +52,54 @@ resource "aws_route_table" "public_route_table" {
   }
 
   tags = {
-    Name        = "${var.environment}-public-route-table"
-    Environment = var.environment
+    Name = "main-route-table"
   }
 }
 
-# Associate public route table with public subnet
-resource "aws_route_table_association" "public_rta" {
-  subnet_id      = aws_subnet.public_subnet.id
-  route_table_id = aws_route_table.public_route_table.id
+# Associate the route table with both subnets
+resource "aws_route_table_association" "route_table_private_subnet_av_zone_a" {
+  subnet_id      = aws_subnet.private_subnet_av_zone_a.id
+  route_table_id = aws_route_table.main.id
 }
 
-# Create private route table for Lambda
-resource "aws_route_table" "private_route_table" {
-  vpc_id = aws_vpc.vpc.id
+# resource "aws_route_table_association" "route_table_private_subnet_av_zone_b" {
+#   subnet_id      = aws_subnet.private_subnet_av_zone_b.id
+#   route_table_id = aws_route_table.main.id
+# }
 
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat_gateway.id
+# Create security group for the database
+resource "aws_security_group" "main_sg" {
+  name        = "${var.environment}-main-security-group"
+  description = "Security group for RDS and Lambda"
+  vpc_id      = aws_vpc.main_vpc.id
+
+  ingress {
+    description = "PostgreSQL"
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    self        = true
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name        = "${var.environment}-private-route-table"
+    Name        = "${var.environment}-main-security-group"
     Environment = var.environment
   }
 }
 
-# Associate private route table with Lambda subnet
-resource "aws_route_table_association" "lambda_rta" {
-  subnet_id      = aws_subnet.lambda_subnet.id
-  route_table_id = aws_route_table.private_route_table.id
-}
+# DB Subnet Group
+resource "aws_db_subnet_group" "db_subnet_group" {
+  name       = "main"
+  subnet_ids = [aws_subnet.private_subnet_av_zone_a.id] //, aws_subnet.private_subnet_av_zone_b.id]
 
-# Get current region
-data "aws_region" "current" {}
+  tags = {
+    Name = "My DB subnet group"
+  }
+}
