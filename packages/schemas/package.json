@@ -1,17 +1,17 @@
 {
-	"name": "@comfy/schemas",
-	"version": "1.0.0",
-	"main": "src/index.ts",
-	"scripts": {
-		"generate:openapi": "tsx ./src/documentation/generateDocs.ts"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"description": "",
-	"dependencies": {
-		"zod": "^3.23.8",
-		"yaml": "^2.6.0",
-		"@asteasolutions/zod-to-openapi": "^7.2.0"
-	}
+  "name": "@comfy/schemas",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "scripts": {
+    "generate:openapi": "tsx ./src/documentation/generateDocs.ts && cp src/documentation/openapi.json ../../documentation/src/api-documentation"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "zod": "^3.23.8",
+    "yaml": "^2.6.0",
+    "@asteasolutions/zod-to-openapi": "^7.2.0"
+  }
 }

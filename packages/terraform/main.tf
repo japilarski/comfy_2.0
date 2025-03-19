@@ -12,7 +12,7 @@ terraform {
 # Provider
 provider "aws" {
   region  = var.region
-  profile = "priv"
+  profile = var.profile
 }
 
 # Network module

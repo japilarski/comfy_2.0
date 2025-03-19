@@ -1,3 +1,7 @@
+variable "profile" {
+  description = "AWS profile name"
+}
+
 variable "region" {
   description = "AWS region"
 }

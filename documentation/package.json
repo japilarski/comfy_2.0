@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "markdownlint": "markdownlint * .md --config '../markdown-linter-rules.json' --ignore-path '../.markdownlintignore'",
-    "generate-docs": "npm run generate-docs -w @comfy/schemas"
+    "markdownlint": "markdownlint * .md --config '../markdown-linter-rules.json' --ignore-path '../.markdownlintignore'"
   },
   "dependencies": {
     "@docusaurus/core": "3.5.2",

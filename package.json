@@ -10,7 +10,8 @@
     "frontend:build": "npx vite build -w=@comfy/frontend",
     "db:init": "npm run db:init -w=@comfy/database",
     "recreate:dev": "docker-compose down -v && docker-compose up",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "generate:openapi": "npm run generate:openapi -w=@comfy/schemas"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,11 @@
+{
+  "name": "@comfy/terraform",
+  "version": "1.0.0",
+  "scripts": {
+    "plan:dev": "terraform plan --var-file=envs/dev.tfvars -lock=false -var='profile=comfy'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

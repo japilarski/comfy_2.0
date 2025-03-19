@@ -89,3 +89,25 @@ resource "aws_api_gateway_deployment" "api" {
     create_before_destroy = true
   }
 }
+
+# API Gateway stage
+resource "aws_api_gateway_stage" "api" {
+  stage_name    = var.environment
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  deployment_id = aws_api_gateway_deployment.api.id
+
+  # access_log_settings {
+  #   destination_arn = aws_cloudwatch_log_group.api_logs.arn
+  #   format = jsonencode({
+  #     requestId       = "$context.requestId"
+  #     extendedRequestId = "$context.extendedRequestId"
+  #     status          = "$context.status"
+  #     integrationStatus = "$context.integrationStatus"
+  #     responseLength  = "$context.responseLength"
+  #   })
+  # }
+
+  tags = {
+    Environment = var.environment
+  }
+}
