@@ -13,3 +13,7 @@ variable "lambda_function_arn" {
 variable "lambda_invoke_arn" {
   description = "Invoke ARN of the Lambda function"
 }
+
+variable "project_tag" {
+  description = "Project tag for maintaining resources"
+}

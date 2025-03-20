@@ -38,3 +38,7 @@ variable "db_password" {
 variable "db_port" {
   description = "Database port"
 }
+
+variable "project_tag" {
+  description = "Project tag for maintaining resources"
+}

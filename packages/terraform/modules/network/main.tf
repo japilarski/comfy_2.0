@@ -6,6 +6,7 @@ resource "aws_vpc" "main_vpc" {
 
   tags = {
     Name        = "${var.environment}-vpc"
+    Project     = var.project_tag
     Environment = var.environment
   }
 }
@@ -18,6 +19,7 @@ resource "aws_subnet" "private_subnet_av_zone_a" {
 
   tags = {
     Name        = "${var.environment}-private-subnet-a"
+    Project     = var.project_tag
     Environment = var.environment
   }
 }
@@ -29,6 +31,7 @@ resource "aws_subnet" "private_subnet_av_zone_a" {
 #
 #   tags = {
 #     Name        = "${var.environment}-private-subnet-b"
+#     Project     = var.project_tag
 #     Environment = var.environment
 #   }
 # }
@@ -39,6 +42,8 @@ resource "aws_internet_gateway" "igw" {
 
   tags = {
     Name = "main-igw"
+    Project     = var.project_tag
+    Environment = var.environment
   }
 }
 
@@ -53,6 +58,8 @@ resource "aws_route_table" "main" {
 
   tags = {
     Name = "main-route-table"
+    Project     = var.project_tag
+    Environment = var.environment
   }
 }
 
@@ -70,15 +77,15 @@ resource "aws_route_table_association" "route_table_private_subnet_av_zone_a" {
 # Create security group for the database
 resource "aws_security_group" "main_sg" {
   name        = "${var.environment}-main-security-group"
-  description = "Security group for RDS and Lambda"
+  description = "Security group for RDS and Lambda. "
   vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
-    description = "PostgreSQL"
+    description = "PostgreSQL from anywhere"
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    self        = true
+    cidr_blocks = ["0.0.0.0/0"]  # Allow access from any IP address
   }
 
   egress {
@@ -90,6 +97,7 @@ resource "aws_security_group" "main_sg" {
 
   tags = {
     Name        = "${var.environment}-main-security-group"
+    Project     = var.project_tag
     Environment = var.environment
   }
 }
@@ -101,5 +109,8 @@ resource "aws_db_subnet_group" "db_subnet_group" {
 
   tags = {
     Name = "My DB subnet group"
+    Project     = var.project_tag
+    Environment = var.environment
   }
 }
+

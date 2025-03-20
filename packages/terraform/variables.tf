@@ -23,3 +23,7 @@ variable "db_port" {
   description = "Port for PostgreSQL database"
   default     = 5432
 }
+
+variable "project_tag" {
+  description = "Project tag for maintaining resources"
+}

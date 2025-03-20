@@ -8,6 +8,7 @@ resource "aws_api_gateway_rest_api" "api" {
   }
 
   tags = {
+    Project     = var.project_tag
     Environment = var.environment
   }
 }
@@ -108,6 +109,7 @@ resource "aws_api_gateway_stage" "api" {
   # }
 
   tags = {
+    Project     = var.project_tag
     Environment = var.environment
   }
 }

@@ -23,6 +23,7 @@ resource "aws_iam_role" "lambda_role" {
   })
 
   tags = {
+    Project     = var.project_tag
     Environment = var.environment
   }
 }
@@ -66,5 +67,6 @@ resource "aws_lambda_function" "products_lambda" {
 
   tags = {
     Environment = var.environment
+    Project     = var.project_tag
   }
 }

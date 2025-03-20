@@ -4,7 +4,7 @@ import { logger } from '@comfy/logger';
 import { createDatabaseClient } from './providers/databaseProvider';
 import * as dotenv from 'dotenv';
 
-dotenv.config(); // Load environment variables from .env
+dotenv.config();
 
 const schemas = ['products'];
 

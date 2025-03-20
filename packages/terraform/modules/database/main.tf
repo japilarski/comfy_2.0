@@ -31,6 +31,7 @@ resource "aws_db_instance" "postgres" {
   storage_encrypted       = false
 
   tags = {
+    Project     = var.project_tag
     Name        = "${var.environment}-postgres-db"
     Environment = var.environment
   }

@@ -47,3 +47,7 @@ variable "storage_type" {
   description = "PostgreSQL engine version"
   default     = "gp2"
 }
+
+variable "project_tag" {
+  description = "Project tag for maintaining resources"
+}
