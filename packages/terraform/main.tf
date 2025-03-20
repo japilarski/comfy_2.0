@@ -51,7 +51,7 @@ module "lambda" {
   vpc_id                      = module.network.vpc_id
   main_sg_id                  = module.network.main_security_group_id
   private_subnet_av_zone_a_id = module.network.private_subnet_av_zone_a_id
-  # private_subnet_av_zone_b_id = module.network.private_subnet_av_zone_b_id
+  private_subnet_av_zone_b_id = module.network.private_subnet_av_zone_b_id
 }
 
 # API Gateway module

@@ -32,4 +32,8 @@ Make all public to simplify the process of development.
 - Consider using AWS Secrets Manager for database credentials
 - Implement least privilege IAM roles for your Lambda functions
 
+### API Gateway
+- Limit CORS to front-end domain.
+- Restrict access to CloudFront-distributed frontend.
+
 This setup maintains security by isolating database in a private network while allowing only necessary communication between components.

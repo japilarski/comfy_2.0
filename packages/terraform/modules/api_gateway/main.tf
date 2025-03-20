@@ -38,25 +38,25 @@ resource "aws_api_gateway_integration" "lambda_products" {
   uri                     = var.lambda_invoke_arn
 }
 
-# /products/{id} resource
+# /products/{productId} resource
 resource "aws_api_gateway_resource" "product" {
   rest_api_id = aws_api_gateway_rest_api.api.id
   parent_id   = aws_api_gateway_resource.products.id
-  path_part   = "{id}"
+  path_part   = "{productId}"
 }
 
-# GET method for /products/{id}
+# GET method for /products/{productId}
 resource "aws_api_gateway_method" "get_product" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.product.id
   http_method   = "GET"
   authorization = "NONE"
   request_parameters = {
-    "method.request.path.id" = true
+    "method.request.path.productId" = true
   }
 }
 
-# Integration with Lambda for /products/{id}
+# Integration with Lambda for /products/{productId}
 resource "aws_api_gateway_integration" "lambda_product" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
   resource_id             = aws_api_gateway_resource.product.id
@@ -81,7 +81,12 @@ resource "aws_lambda_permission" "api_gateway" {
 resource "aws_api_gateway_deployment" "api" {
   depends_on = [
     aws_api_gateway_integration.lambda_products,
-    aws_api_gateway_integration.lambda_product
+    aws_api_gateway_integration.lambda_product,
+    # CORS
+    aws_api_gateway_integration.options_products,
+    aws_api_gateway_integration.options_product,
+    aws_api_gateway_integration_response.options_products,
+    aws_api_gateway_integration_response.options_product,
   ]
 
   rest_api_id = aws_api_gateway_rest_api.api.id
@@ -97,19 +102,145 @@ resource "aws_api_gateway_stage" "api" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   deployment_id = aws_api_gateway_deployment.api.id
 
-  # access_log_settings {
-  #   destination_arn = aws_cloudwatch_log_group.api_logs.arn
-  #   format = jsonencode({
-  #     requestId       = "$context.requestId"
-  #     extendedRequestId = "$context.extendedRequestId"
-  #     status          = "$context.status"
-  #     integrationStatus = "$context.integrationStatus"
-  #     responseLength  = "$context.responseLength"
-  #   })
-  # }
-
   tags = {
     Project     = var.project_tag
     Environment = var.environment
+  }
+}
+######################
+######## CORS ########
+######################
+# review this stuff. Is there a better way to do this?
+
+# Method response for GET /products
+resource "aws_api_gateway_method_response" "get_products" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.products.id
+  http_method = aws_api_gateway_method.get_products.http_method
+  status_code = "200"
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
+}
+
+# OPTIONS method for CORS on /products
+resource "aws_api_gateway_method" "options_products" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.products.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+# Mock integration for OPTIONS method on /products
+resource "aws_api_gateway_integration" "options_products" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.products.id
+  http_method = aws_api_gateway_method.options_products.http_method
+  type        = "MOCK"
+  request_templates = {
+    "application/json" = jsonencode({
+      statusCode = 200
+    })
+  }
+}
+
+# Method response for OPTIONS /products
+resource "aws_api_gateway_method_response" "options_products" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.products.id
+  http_method = aws_api_gateway_method.options_products.http_method
+  status_code = "200"
+  
+  response_models = {
+    "application/json" = "Empty"
+  }
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+  }
+}
+
+# Integration response for OPTIONS /products
+resource "aws_api_gateway_integration_response" "options_products" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.products.id
+  http_method = aws_api_gateway_method.options_products.http_method
+  status_code = aws_api_gateway_method_response.options_products.status_code
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+}
+# Method response for GET /products/{productId}
+resource "aws_api_gateway_method_response" "get_product" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.product.id
+  http_method = aws_api_gateway_method.get_product.http_method
+  status_code = "200"
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
+}
+
+# OPTIONS method for CORS on /products/{productId}
+resource "aws_api_gateway_method" "options_product" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.product.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+# Mock integration for OPTIONS method on /products/{productId}
+resource "aws_api_gateway_integration" "options_product" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.product.id
+  http_method = aws_api_gateway_method.options_product.http_method
+  type        = "MOCK"
+  request_templates = {
+    "application/json" = jsonencode({
+      statusCode = 200
+    })
+  }
+}
+
+# Method response for OPTIONS /products/{productId}
+resource "aws_api_gateway_method_response" "options_product" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.product.id
+  http_method = aws_api_gateway_method.options_product.http_method
+  status_code = "200"
+  
+  response_models = {
+    "application/json" = "Empty"
+  }
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+  }
+}
+
+# Integration response for OPTIONS /products/{productId}
+resource "aws_api_gateway_integration_response" "options_product" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  resource_id = aws_api_gateway_resource.product.id
+  http_method = aws_api_gateway_method.options_product.http_method
+  status_code = aws_api_gateway_method_response.options_product.status_code
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
   }
 }

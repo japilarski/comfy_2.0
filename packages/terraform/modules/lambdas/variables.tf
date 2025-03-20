@@ -10,9 +10,9 @@ variable "private_subnet_av_zone_a_id" {
   description = "ID of the availability zone A private subnet"
 }
 
-# variable "private_subnet_av_zone_b_id" {
-#   description = "ID of the availability zone B private subnet"
-# }
+variable "private_subnet_av_zone_b_id" {
+  description = "ID of the availability zone B private subnet"
+}
 
 variable "main_sg_id" {
   description = "ID of the main security group"

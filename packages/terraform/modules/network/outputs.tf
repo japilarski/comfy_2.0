@@ -14,6 +14,6 @@ output "private_subnet_av_zone_a_id" {
   value = aws_subnet.private_subnet_av_zone_a.id
 }
 
-# output "private_subnet_av_zone_b_id" {
-#   value = aws_subnet.private_subnet_av_zone_b.id
-# }
+output "private_subnet_av_zone_b_id" {
+  value = aws_subnet.private_subnet_av_zone_b.id
+}

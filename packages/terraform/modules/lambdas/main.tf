@@ -51,7 +51,7 @@ resource "aws_lambda_function" "products_lambda" {
 
   # VPC configuration to access the private RDS instance
   vpc_config {
-    subnet_ids         = [var.private_subnet_av_zone_a_id] //, var.private_subnet_av_zone_b_id]
+    subnet_ids         = [var.private_subnet_av_zone_a_id, var.private_subnet_av_zone_b_id]
     security_group_ids = [var.main_sg_id]
   }
 

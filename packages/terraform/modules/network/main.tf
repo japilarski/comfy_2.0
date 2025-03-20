@@ -24,17 +24,17 @@ resource "aws_subnet" "private_subnet_av_zone_a" {
   }
 }
 
-# resource "aws_subnet" "private_subnet_av_zone_b" {
-#   vpc_id            = aws_vpc.main_vpc.id
-#   cidr_block        = "10.0.2.0/24"
-#   availability_zone = "${var.region}b"
-#
-#   tags = {
-#     Name        = "${var.environment}-private-subnet-b"
-#     Project     = var.project_tag
-#     Environment = var.environment
-#   }
-# }
+resource "aws_subnet" "private_subnet_av_zone_b" {
+  vpc_id            = aws_vpc.main_vpc.id
+  cidr_block        = "10.0.2.0/24"
+  availability_zone = "${var.region}b"
+
+  tags = {
+    Name        = "${var.environment}-private-subnet-b"
+    Project     = var.project_tag
+    Environment = var.environment
+  }
+}
 
 # Internet Gateway for the VPC
 resource "aws_internet_gateway" "igw" {
@@ -69,10 +69,10 @@ resource "aws_route_table_association" "route_table_private_subnet_av_zone_a" {
   route_table_id = aws_route_table.main.id
 }
 
-# resource "aws_route_table_association" "route_table_private_subnet_av_zone_b" {
-#   subnet_id      = aws_subnet.private_subnet_av_zone_b.id
-#   route_table_id = aws_route_table.main.id
-# }
+resource "aws_route_table_association" "route_table_private_subnet_av_zone_b" {
+  subnet_id      = aws_subnet.private_subnet_av_zone_b.id
+  route_table_id = aws_route_table.main.id
+}
 
 # Create security group for the database
 resource "aws_security_group" "main_sg" {
@@ -105,7 +105,7 @@ resource "aws_security_group" "main_sg" {
 # DB Subnet Group
 resource "aws_db_subnet_group" "db_subnet_group" {
   name       = "main"
-  subnet_ids = [aws_subnet.private_subnet_av_zone_a.id] //, aws_subnet.private_subnet_av_zone_b.id]
+  subnet_ids = [aws_subnet.private_subnet_av_zone_a.id, aws_subnet.private_subnet_av_zone_b.id]
 
   tags = {
     Name = "My DB subnet group"
