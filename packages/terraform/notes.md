@@ -36,4 +36,7 @@ Make all public to simplify the process of development.
 - Limit CORS to front-end domain.
 - Restrict access to CloudFront-distributed frontend.
 
+### Cloud Front
+- review cashing possibilities
+
 This setup maintains security by isolating database in a private network while allowing only necessary communication between components.
