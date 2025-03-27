@@ -2,7 +2,7 @@ FROM node:20
 
 WORKDIR /usr/src/app
 
-EXPOSE 3000
+EXPOSE 5173
 
 COPY package.json package-lock.json ./
 
@@ -10,4 +10,4 @@ RUN npm ci
 
 COPY . ./
 
-CMD ["npm", "run", "frontend:dev"]
+CMD ["npm", "run", "dev:front"]

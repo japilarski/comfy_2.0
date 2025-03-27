@@ -20,8 +20,9 @@ services:
   express-dev-app:
     volumes:
       - .:/usr/src/app
+      - ./../comfy-2-data/processed_data:/usr/src/app/processed_data
     build:
-      dockerfile: ./express-dev-app.dockerfile
+      dockerfile: ./dockerfiles/express-dev-app.dockerfile
     ports:
       - '5001:5001'
     depends_on:
@@ -36,7 +37,8 @@ services:
     working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app
-    command: ["npm", "run", "db:init"]
+      - ./../comfy-2-data/products.json:/usr/src/app/products.json
+    command: ['npm', 'run', 'db:init']
     depends_on:
       postgres:
         condition: service_healthy
@@ -47,15 +49,14 @@ services:
     volumes:
       - .:/usr/src/app
     build:
-      dockerfile: ./vite-dev-frontend.dockerfile
+      dockerfile: ./dockerfiles/vite-dev-frontend.dockerfile
     ports:
-      - '3000:3000'
+      - '5173:5173'
     depends_on:
       postgres:
         condition: service_healthy
     env_file:
       - .env
-
 
 volumes:
   postgres_data:

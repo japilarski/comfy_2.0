@@ -1,9 +1,6 @@
 import { useDispatch } from 'react-redux';
-import {
-  removeItem,
-  editItem,
-} from '../../features';
-import {cartItem} from '../../types';
+import { removeItem, editItem } from '../../features';
+import { cartItem } from '../../types';
 import { formatPrice } from '../../utils';
 import { generateAmountOptions } from '../../utils/generateAmountOptions';
 
@@ -33,7 +30,7 @@ export const CartItem = (props: cartItemProps) => {
     >
       {/* IMAGE */}
       <img
-        src={cartItem.image}
+        src={import.meta.env.VITE_BASE_IMG_URL + cartItem.main_img_url}
         alt={cartItem.title}
         className="h-24 w-24 rounded-lg sm:h-32 sm:w-32 object-cover"
       />
@@ -42,17 +39,12 @@ export const CartItem = (props: cartItemProps) => {
         {/* TITLE */}
         <h3 className="capitalize font-medium">{cartItem.title}</h3>
         {/* COMPANY */}
-        <h4 className="mt-2 capitalize text-sm text-neutral-content">
-          {cartItem.company}
-        </h4>
-        {/* COLOR */}
+        <h4 className="mt-2 capitalize text-sm text-neutral-content">{cartItem.company}</h4>
+        {/* COLOR
         <p className="mt-4 text-sm capitalize flex items-center gap-x-2">
           color:
-          <span
-            className="badge badge-sm"
-            style={{ backgroundColor: cartItem.productColor }}
-          ></span>
-        </p>
+          <span className="badge badge-sm" style={{ backgroundColor: cartItem.productColor }}></span>
+        </p> */}
       </div>
       <div className="ml-4 sm:ml-24">
         {/* AMOUNT */}
@@ -71,17 +63,14 @@ export const CartItem = (props: cartItemProps) => {
           </select>
         </div>
         {/* REMOVE */}
-        <button
-          className="mt-2 link link-primary link-hover text-sm"
-          onClick={removeItemFromCart}
-        >
+        <button className="mt-2 link link-primary link-hover text-sm" onClick={removeItemFromCart}>
           remove
         </button>
       </div>
       {/* PRICE */}
-      <p className="font-medium ml-4 sm:ml-auto mt-2 sm:mt-0">
-        {formatPrice(cartItem.price)}
-      </p>
+      {cartItem.price ? (
+        <p className="font-medium ml-4 sm:ml-auto mt-2 sm:mt-0">{formatPrice(cartItem.price)}</p>
+      ) : null}
     </article>
   );
 };

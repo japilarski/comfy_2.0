@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { addItem } from '../features';
 import { generateAmountOptions } from '../utils/generateAmountOptions';
 import { QueryClient } from '@tanstack/react-query';
+import { ProductImageGallery } from '../components/ProductImageGallery';
 
 const singleProductQuery = (id: number) => ({
   queryKey: ['singleProduct', id],
@@ -20,8 +21,9 @@ export const loader =
   };
 
 export const SingleProduct = () => {
-  const { product } = useLoaderData() as singleProductResponse;
-  const [productColor, setProductColor] = useState(product.colors[0]);
+  const { product } = useLoaderData(); //as singleProductResponse;
+  console.log(product);
+  // const [productColor, setProductColor] = useState(product.colors[0]);
   const [amount, setAmount] = useState(1);
 
   const handleAmount = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -29,13 +31,12 @@ export const SingleProduct = () => {
   };
 
   const cartProduct: cartItem = {
-    cartId: product.id + productColor,
+    cartId: product.id,
     productId: product.id,
-    image: product.image,
+    main_img_url: product.main_img_url,
     title: product.name,
     price: product.price,
     company: product.company,
-    productColor,
     amount,
   };
 
@@ -62,16 +63,22 @@ export const SingleProduct = () => {
 
       {/* PRODUCT */}
       <div className="mt-6 grid gap-y-8 lg:grid-cols-2 lg:gap-x-16">
+        <ProductImageGallery product={product} />
         {/* IMAGE */}
-        <img src={product.image} alt={product.name} className="w-96 h-96 object-cover rounded-lg lg:w-full"></img>
+
+        {/* <img
+          src={import.meta.env.VITE_BASE_IMG_URL + product.main_img_url}
+          alt={product.name}
+          className="w-96 h-96 object-cover rounded-lg lg:w-full"
+        ></img> */}
         {/* DESCRIPTION */}
         <div>
           <h1 className="capitalize text-3xl font-bold">{product.name}</h1>
           <h4 className="text-xl text-neutral-content font-bold mt-2">{product.company}</h4>
-          <p className="mt-3 text-xl">{formatPrice(product.price)}</p>
+          {product.price ? <p className="mt-3 text-xl">{formatPrice(product.price)}</p> : null}
           <p className="mt-6 leading-8">{product.description}</p>
           {/* COLORS */}
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <h4 className="text-md font-medium tracking-wider capitalize">colors</h4>
             <div className="mt-2 flex items-center">
               {product.colors.map((color) => {
@@ -86,7 +93,7 @@ export const SingleProduct = () => {
                 );
               })}
             </div>
-          </div>
+          </div> */}
           {/* AMOUNT */}
           <div className="form-control w-full max-w-xs">
             <label htmlFor="amount" className="">

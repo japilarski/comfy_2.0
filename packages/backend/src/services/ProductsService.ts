@@ -1,5 +1,6 @@
+import { logger } from '@comfy/logger';
 import { ProductQueryParams } from '../schemas';
-import { Product, ProductsMetadata, SimplifiedProduct } from '../types';
+import { Product, ProductResponseMetadata, SimplifiedProduct } from '@comfy/schemas';
 import { Client } from 'pg';
 
 export class ProductsService {
@@ -7,31 +8,31 @@ export class ProductsService {
 
   constructor(private client: Client) {}
 
-  public async getProductById(productId: number): Promise<Product | null> {
+  public async getProductById(productId: string): Promise<Product | null> {
     const queryResult = await this.client.query<Product>('SELECT * FROM product WHERE id = $1', [productId]);
     return queryResult.rows[0] ? queryResult.rows[0] : null;
   }
 
   public async getProducts(params: ProductQueryParams): Promise<SimplifiedProduct[] | []> {
+    logger.debug(params);
     const processedParams = this.processQueryParams(params);
+    logger.debug(processedParams);
     const queryResult = await this.client.query<SimplifiedProduct>(
       `
-          SELECT id, name, price, image FROM product
-          WHERE shipping = COALESCE($1, shipping)
-            AND featured = COALESCE($2, featured)
-            AND category = COALESCE($3, category)
-            AND company = COALESCE($4, company)
-            AND name ~* COALESCE($5, name)
-            AND price <= COALESCE($6, price)
-          ORDER BY
-              CASE WHEN $7 = 'a-z' THEN name END,
-              CASE WHEN $7 = 'z-a' THEN name END DESC,
-              CASE WHEN $7 = 'low' THEN price END,
-              CASE WHEN $7 = 'high' THEN price END DESC
-          LIMIT $8 OFFSET $9;
+        SELECT id, name, price, main_img_url FROM product
+          WHERE featured = COALESCE($1::BOOLEAN, featured)
+          AND category = COALESCE($2, category)
+          AND company = COALESCE($3, company)
+          AND name ~* COALESCE($4, name)
+          AND (price <= COALESCE($5, price) OR price IS NULL)
+        ORDER BY
+          CASE WHEN $6 = 'a-z' THEN name END,
+          CASE WHEN $6 = 'z-a' THEN name END DESC,
+          CASE WHEN $6 = 'low' THEN price END,
+          CASE WHEN $6 = 'high' THEN price END DESC
+        LIMIT $7 OFFSET $8;
       `,
       [
-        processedParams.shipping,
         processedParams.featured,
         processedParams.category,
         processedParams.company,
@@ -46,20 +47,18 @@ export class ProductsService {
     return queryResult.rows;
   }
 
-  public async getMetadata(params: ProductQueryParams): Promise<ProductsMetadata> {
+  public async getMetadata(params: ProductQueryParams): Promise<ProductResponseMetadata> {
     const processedParams = this.processQueryParams(params);
     const total = await this.client.query(
       `
-          SELECT COUNT(*) FROM product
-          WHERE shipping = COALESCE($1, shipping)
-            AND featured = COALESCE($2, featured)
-            AND category = COALESCE($3, category)
-            AND company = COALESCE($4, company)
-            AND name ~* COALESCE($5, name)
-            AND price <= COALESCE($6, price);
+        SELECT COUNT(*) FROM product
+          WHERE featured = COALESCE($1::BOOLEAN, featured)
+          AND category = COALESCE($2, category)
+          AND company = COALESCE($3, company)
+          AND name ~* COALESCE($4, name)
+          AND (price <= COALESCE($5, price) OR price IS NULL);
       `,
       [
-        processedParams.shipping,
         processedParams.featured,
         processedParams.category,
         processedParams.company,
@@ -88,7 +87,7 @@ export class ProductsService {
       skip: (this.getPage(params?.page) - 1) * this.pageSize,
       take: this.pageSize,
       shipping: params?.shipping ? params.shipping === 'on' : null,
-      featured: params?.featured ? params.featured === 'true' : null,
+      featured: params?.featured === 'true' ? true : params?.featured === 'false' ? false : null,
       category: params?.category && params.category !== 'all' ? params.category : null,
       company: params?.company && params.company !== 'all' ? params.company : null,
       search: params?.search ?? null,

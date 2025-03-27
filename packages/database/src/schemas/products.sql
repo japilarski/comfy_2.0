@@ -1,12 +1,14 @@
-CREATE TABLE IF NOT EXISTS product (
-    id SERIAL PRIMARY KEY,
+DROP TABLE IF EXISTS product;
+CREATE TABLE product (
+    id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
+    collection TEXT,
     company TEXT NOT NULL,
-    description TEXT NOT NULL,
-    featured BOOLEAN NOT NULL,
     category TEXT NOT NULL,
-    image TEXT NOT NULL,
-    price INTEGER NOT NULL,
-    shipping BOOLEAN NOT NULL,
-    colors TEXT[] NOT NULL
+    description TEXT,
+    manual_url TEXT,
+    main_img_url TEXT NOT NULL,
+    img_urls TEXT[],
+    featured BOOLEAN NOT NULL,
+    price INTEGER
 );
