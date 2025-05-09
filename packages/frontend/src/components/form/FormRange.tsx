@@ -20,17 +20,15 @@ export type FormRangeProps = {
 
 export const FormRange = (props: FormRangeProps) => {
   // const { products } = useLoaderData() as productsLoaderResponse;
-  const maxPrice = 100_000_000;
+  const maxPrice = 10_000_00;
   const step = 100;
-  const [selectedPrice, setSelectedPrice] = useState(
-    props.defaultValue ? parseInt(props.defaultValue) : maxPrice
-  );
+  const [selectedPrice, setSelectedPrice] = useState(props.defaultValue ? parseInt(props.defaultValue) : maxPrice);
 
   return (
     <div>
       <label htmlFor={props.name} className="label cursor-pointer">
         <span className="label-text capitalize">{props.label}</span>
-        <span>${formatPrice(selectedPrice)}</span>
+        <span>{formatPrice(selectedPrice)} zł</span>
       </label>
       <input
         type="range"

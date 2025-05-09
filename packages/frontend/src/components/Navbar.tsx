@@ -22,7 +22,7 @@ export const Navbar = () => {
         <div className="navbar-start">
           {/* TITLE */}
           <NavLink to="/" className="hidden lg:flex btn btn-primary text-3xl items-center">
-            C
+            M
           </NavLink>
           {/* DROPDOWN */}
           <div className="dropdown">

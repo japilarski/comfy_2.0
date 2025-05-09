@@ -18,12 +18,12 @@ export const action =
     try {
       const response = await customFetch.post('/auth/local', data);
       store.dispatch(loginUser(response.data));
-      toast.success('Logged in!');
+      toast.success('Zalogowano!');
       return redirect('/');
     } catch (error) {
       const errorMessage =
         (error as customError)?.response?.data?.error?.message ||
-        'Please double check your credentials';
+        'Sprawdź podobnie swoje dane logowania';
       toast.error(errorMessage);
       return null;
     }
@@ -40,11 +40,11 @@ export const Login = () => {
         password: 'secret',
       });
       dispatch(loginUser(response.data));
-      toast.success('welcome guest user!');
+      toast.success('Witaj!');
       navigate('/');
     } catch (error) {
       console.log(error);
-      toast.error('guest user login error!');
+      toast.error('Błąd logowania!');
     }
   };
 

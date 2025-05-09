@@ -4,6 +4,7 @@ import { FormSelect } from './FormSelect';
 import { productsLoaderResponse } from '../../types';
 import { FormRange } from './FormRange';
 import { FormCheckbox } from './FormCheckbox';
+import { formatPrice } from '../../utils/formatPrice';
 export const Filters = () => {
   const { metadata, searchParams } = useLoaderData() as productsLoaderResponse;
 
@@ -12,55 +13,51 @@ export const Filters = () => {
       {/* SEARCH */}
       <FormInput
         type="search"
-        label="search product"
+        label="szukaj produktu"
         name="search"
         size="input-sm"
         defaultValue={searchParams.search}
       ></FormInput>
       {/* CATEGORIES */}
       <FormSelect
-        label="select category"
+        label="kategoria"
         name="category"
-        listToDisplay={['all', ...metadata.categories]}
+        listToDisplay={['wszystkie', ...metadata.categories]}
         size="select-sm"
         defaultValue={searchParams.category}
       ></FormSelect>
       {/* COMPANIES */}
       <FormSelect
-        label="select company"
+        label="Producent"
         name="company"
-        listToDisplay={['all', ...metadata.companies]}
+        listToDisplay={['wszystkie', ...metadata.companies]}
         size="select-sm"
         defaultValue={searchParams.company}
       ></FormSelect>
       {/* ORDER */}
       <FormSelect
-        label="sort by"
+        label="sortuj"
         name="order"
-        listToDisplay={['a-z', 'z-a', 'high', 'low']}
+        listToDisplay={['a-z', 'z-a', 'najwyższa cena', 'najniższa cena']}
         size="select-sm"
         defaultValue={searchParams.order}
       ></FormSelect>
       {/* PRICE */}
-      <FormRange
-        name="price"
-        label="select price"
-        size="range-sm"
-        defaultValue={searchParams.price}
-      ></FormRange>
+      <FormRange name="price" label="cena" size="range-sm" defaultValue={searchParams.price}></FormRange>
       {/* SHIPPING */}
-      <FormCheckbox
+      <div></div> {/* TODO: przesyłka? */}
+      {/* <FormCheckbox
         name="shipping"
-        label="free shipping"
+        label="darmowa przesyłka"
         size="checkbox-sm"
         defaultValue={searchParams.shipping}
-      ></FormCheckbox>
+      ></FormCheckbox> */}
       {/* BUTTONS */}
       <button type="submit" className="btn btn-primary btn-sm">
-        search
+        szukaj
       </button>
       <Link to="/products" className="btn btn-accent btn-sm">
-        reset
+        resetuj
       </Link>
     </Form>
   );

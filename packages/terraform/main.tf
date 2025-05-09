@@ -65,24 +65,3 @@ module "api_gateway" {
   lambda_invoke_arn    = module.lambda.invoke_arn
 }
 
-# resource "random_string" "suffix" {
-#   length  = 8
-#   special = false
-#   upper   = false
-# }
-#
-# # Front-end S3 module
-# module "s3_bucket" {
-#   source = "./modules/s3"
-#
-#   bucket_name = "${var.environment}-${random_string.suffix.result}"
-# }
-#
-# # CloudFront module
-# module "cloud_front" {
-#   source = "./modules/cloud_front"
-#
-#   bucket_name               = module.s3_bucket.bucket_name
-#   bucket_regional_domain_name = module.s3_bucket.bucket_regional_domain_name
-#   bucket_arn                = module.s3_bucket.bucket_arn
-# }

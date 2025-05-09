@@ -18,7 +18,7 @@ export type userState = {
 };
 
 const getThemeFromLocalStorage = (): ThemeEnum => {
-  const theme = (localStorage.getItem('theme') as ThemeEnum) || ThemeEnum.DARK;
+  const theme = (localStorage.getItem('theme') as ThemeEnum) || ThemeEnum.LIGHT;
   document.documentElement.setAttribute('data-theme', theme);
   return theme;
 };
@@ -46,7 +46,7 @@ const userSlice = createSlice({
     logoutUser: (state) => {
       state.user = null;
       localStorage.removeItem('user');
-      toast.success('Logged out!');
+      toast.success('Wylogowano');
     },
     toggleTheme: (state) => {
       state.theme = state.theme == ThemeEnum.DARK ? ThemeEnum.LIGHT : ThemeEnum.DARK;

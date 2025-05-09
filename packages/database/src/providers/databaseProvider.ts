@@ -1,8 +1,9 @@
 import { Client } from 'pg';
 import * as process from 'node:process';
 import { logger } from '@comfy/logger';
+import { fa } from '@faker-js/faker/.';
 
-export const createDatabaseClient = async (): Promise<Client> => {
+export const createDatabaseClient = async (awsEnv: boolean = false): Promise<Client> => {
   logger.verbose('Creating database client...');
   try {
     const client = new Client({
@@ -11,9 +12,11 @@ export const createDatabaseClient = async (): Promise<Client> => {
       database: process.env.DB_NAME,
       password: process.env.DB_PASSWORD,
       port: Number(process.env.DB_PORT),
-      // ssl: {
-      //   rejectUnauthorized: false, // Use proper SSL configuration in production
-      // },
+      ...(awsEnv && {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      }),
     });
 
     logger.verbose('Client created!');

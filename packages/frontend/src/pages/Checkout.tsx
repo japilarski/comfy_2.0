@@ -7,7 +7,7 @@ import { cartState } from '../types';
 export const loader = (state: any) => () => {
   const user = state.getState().userState.user;
   if (!user) {
-    toast.warn('You must be login to checkout');
+    toast.warn('Musisz być zalogowany aby kontynuować');
     return redirect('/login');
   }
   return null;
@@ -18,12 +18,12 @@ export const Checkout = () => {
     (state: { cartState: cartState }) => state.cartState.cartTotal
   );
   if (cartTotal === 0) {
-    return <SectionTitle text="your cart is empty"></SectionTitle>;
+    return <SectionTitle text="Twój koszyk jest pusty"></SectionTitle>;
   }
 
   return (
     <>
-      <SectionTitle text="place your order"></SectionTitle>
+      <SectionTitle text="Zamów"></SectionTitle>
       <div className="mt-8 grid gap-8  md:grid-cols-2 items-start">
         <CheckoutForm></CheckoutForm>
         <CartTotals></CartTotals>

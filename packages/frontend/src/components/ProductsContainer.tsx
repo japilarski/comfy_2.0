@@ -21,8 +21,8 @@ export const ProductsContainer = () => {
       {/* HEADER */}
       <div className="flex justify-between items-center mt-8 border-b border-base-300 pb-5">
         <h4 className="font-medium text-md">
-          {metadata.pagination.total} product
-          {metadata.pagination.total > 1 && 's'}
+          {metadata.pagination.total} produkt
+          {metadata.pagination.total > 1 && 'ów'}
         </h4>
         <div className="flex gap-x-2">
           <button type="button" onClick={() => setLayout('grid')} className={getActiveStyle('grid')}>

@@ -9,12 +9,12 @@ export const Cart = () => {
   const numItemsInCart = useSelector((state: { cartState: cartState }) => state.cartState.numItemsInCart);
 
   if (numItemsInCart === 0) {
-    return <SectionTitle text="Your cart is empty" />;
+    return <SectionTitle text="Twój koszyk jest pusty" />;
   }
 
   return (
     <>
-      <SectionTitle text="Shopping Cart"></SectionTitle>
+      <SectionTitle text="Twój koszyk"></SectionTitle>
       <div className="mt-8 grid gap-9 lg:grid-cols-12">
         <div className="lg:col-span-8">
           <CartItemsList></CartItemsList>

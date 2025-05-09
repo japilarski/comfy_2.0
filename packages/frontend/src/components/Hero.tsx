@@ -11,13 +11,11 @@ export const Hero = () => {
   return (
     <div className="grid lg:grid-cols-2 gap-24 items-center">
       <div>
-        <h1 className="max-w-2xl text-4xl font-bold tracking-tight sm: text-6xl">
-          We are changing the way people shop
-        </h1>
+        <h1 className="max-w-2xl text-4xl font-bold tracking-tight sm: text-6xl">Sklep Meblowy Piotr Pilarski Rypin</h1>
         <p className="mt-8 max-w-xl text-lg leading-8 text-justify">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quis, exercitationem nobis autem expedita obcaecati
-          aspernatur est quo labore ducimus perferendis explicabo fugit, provident odio hic praesentium illum! Impedit
-          vel laudantium pariatur minus hic? Modi labore atque esse explicabo vel quia.
+          Jesteśmy rodzinną firmą działającą w Rypinie od ponad 20 lat! Serdecznie zapraszamy do naszego stacjonarnego
+          sklepu znajdujące się przy przy na ulicy Dworcowej w Rypinie. Oferujemy największy wybór mebli w mieście i
+          okolicach.
         </p>
       </div>
       <div className="hidden h-[28rem] lg:carousel carousel-center p-4 space-x-4 bg-neutral rounded-box">

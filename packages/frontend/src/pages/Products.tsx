@@ -8,19 +8,51 @@ const url = '/products';
 
 const allProductsQuery = (queryParams: any) => {
   const { search, category, company, order, price, shipping, page } = queryParams;
+  const formatOrder = (order: string | null) => {
+    if (order === 'najniższa cena') {
+      return 'low';
+    }
+    if (order === 'najwyższa cena') {
+      return 'high';
+    }
+    if (!order) {
+      return 'a-z';
+    }
+
+    return order;
+  };
+
+  const formatSelect = (selectValue: string | null) => {
+    if (!selectValue || selectValue === 'wszystkie') {
+      return 'all';
+    }
+
+    return selectValue;
+  };
 
   return {
     queryKey: [
       'products',
       search ?? '',
-      category ?? 'all',
-      company ?? 'all',
-      order ?? 'a-z',
-      price ?? 100000,
+      formatSelect(category),
+      formatSelect(company),
+      formatOrder(order),
+      price ?? 10_000_00,
       shipping ?? false,
       page ?? 1,
     ],
-    queryFn: () => customFetch(url, { params: queryParams }),
+    queryFn: () =>
+      customFetch(url, {
+        params: {
+          search: search ?? '',
+          category: formatSelect(category),
+          company: formatSelect(company),
+          order: formatOrder(order),
+          price: price ?? 10_000_00,
+          shipping: shipping ?? false,
+          page: page ?? 1,
+        },
+      }),
   };
 };
 

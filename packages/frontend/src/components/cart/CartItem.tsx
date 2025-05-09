@@ -50,7 +50,7 @@ export const CartItem = (props: cartItemProps) => {
         {/* AMOUNT */}
         <div className="form-control max-w-xs">
           <label htmlFor="amount" className="label p-0">
-            <span className="label-text">Amount</span>
+            <span className="label-text">Ilość</span>
           </label>
           <select
             name="amount"
@@ -64,7 +64,7 @@ export const CartItem = (props: cartItemProps) => {
         </div>
         {/* REMOVE */}
         <button className="mt-2 link link-primary link-hover text-sm" onClick={removeItemFromCart}>
-          remove
+          usuń
         </button>
       </div>
       {/* PRICE */}

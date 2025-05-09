@@ -34,7 +34,7 @@ export const loader =
     const user = store.getState().userState.user;
 
     if (!user) {
-      toast.warn('You must be logged in to view orders');
+      toast.warn('Musisz być zalogowany!');
       return redirect('/login');
     }
 

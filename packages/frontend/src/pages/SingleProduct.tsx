@@ -76,7 +76,7 @@ export const SingleProduct = () => {
           <h1 className="capitalize text-3xl font-bold">{product.name}</h1>
           <h4 className="text-xl text-neutral-content font-bold mt-2">{product.company}</h4>
           {product.price ? <p className="mt-3 text-xl">{formatPrice(product.price)}</p> : null}
-          <p className="mt-6 leading-8">{product.description}</p>
+          {product.description ? <p className="mt-6 leading-8">{product.description}</p> : null}
           {/* COLORS */}
           {/* <div className="mt-6">
             <h4 className="text-md font-medium tracking-wider capitalize">colors</h4>
@@ -97,7 +97,7 @@ export const SingleProduct = () => {
           {/* AMOUNT */}
           <div className="form-control w-full max-w-xs">
             <label htmlFor="amount" className="">
-              <h4 className="text-md font-medium -tracking-wider capitalize">amount</h4>
+              <h4 className="text-md font-medium -tracking-wider capitalize">ilość</h4>
             </label>
             <select id="amount" className="select select-secondary select-bordered select-md" onChange={handleAmount}>
               {generateAmountOptions(amount + 5)}
@@ -106,7 +106,7 @@ export const SingleProduct = () => {
           {/* CART BUTTON */}
           <div className="mt-10">
             <button className="btn btn-secondary btn-md" onClick={addToCart}>
-              Add to bag
+              Dodaj do koszyka
             </button>
           </div>
         </div>
